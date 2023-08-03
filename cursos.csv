@@ -1,0 +1,49 @@
+#Converción a tibble
+
+Empresas <- tibble::as_tibble(Balances_2014)
+
+#Indicadores financieros ----
+
+#Liquidez 
+ 
+ #Liquidez corriente = Activo Corriente /Pasivo Corriente
+   
+Empresas<- Empresas %>% mutate(LIQUIDEZ_CORRIENTE = TOTAL_ACTIVOS_CORRIENTES/TOTAL_PASIVOS_CORRIENTES)
+
+#Solvencia
+ 
+ #Endeudamiento del activo = Pasivo/Activo
+
+Empresas <- Empresas%>% mutate(ENDEUDAMIENTO_DEL_ACTIVO = TOTAL_DEL_PASIVO/TOTAL_DEL_ACTIVO)
+
+ #Endeudamiento patrimonial = Pasivo / Patrimonio
+
+Empresas <- Empresas %>% mutate(ENDEUDAMIENTO_PATRIMONIAL = TOTAL_DEL_PASIVO/TOTAL_PATRIMONIO_NETO)
+
+ #Endeudamiento del Activo Fijo = Patrimonio / Activo No Corriente
+
+Empresas <- Empresas %>% mutate(ENDEUDAMIENTO_DEL_ACTIVO_FIJO = TOTAL_PATRIMONIO_NETO/TOTAL_ACTIVOS_NO_CORRIENTES)
+
+ #Apalancamiento = Activo / Patrimonio
+
+Empresas <- Empresas %>% mutate(APALANCAMIENTO = TOTAL_DEL_ACTIVO/TOTAL_PATRIMONIO_NETO)
+
+#Base empresas ----
+
+#Tibble asignado con el nombre empresas y sus respectivas variabes
+
+empresas <- Empresas %>% 
+           select(Empresas = NOMBRE_DE_LA_COMPAÑÍA, 
+                  Status = SITUACIÓN_LEGAL, 
+                  Tipo_de_empresa = TIPO, 
+                  Pais = PAÍS, 
+                  Provincia = PROVINCIA, 
+                  Canton = CANTÓN, 
+                  Ciudad = CIUDAD, 
+                  Actividad_economica = CIIU4_NIVEL_1, 
+                  Subactividad = CIIU4_NIVEL_6,
+                  Liquidez_corriente = LIQUIDEZ_CORRIENTE,
+                  Endeudamiento_del_activo = ENDEUDAMIENTO_DEL_ACTIVO,
+                  Endeudamiento_patrimonial = ENDEUDAMIENTO_PATRIMONIAL,
+                  Endeudamiento_del_activo_fijo = ENDEUDAMIENTO_DEL_ACTIVO_FIJO,
+                  Apalancamiento = APALANCAMIENTO) %>% view("empresas")
