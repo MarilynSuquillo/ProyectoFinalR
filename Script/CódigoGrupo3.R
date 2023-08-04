@@ -69,52 +69,39 @@ data_ok <- empresas %>% select(-Activo_corriente, -Pasivo_corriente, -Pasivo,
 #Analisis sobre las preguntas ----
 
 # ¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?
-
 Tamaño_End_Act <- EMPRESAS_FIL %>% 
   select(Empresas,Tamaño, Endeudamiento_del_Activo) %>% view()
-
 Tamaño_End_Act <- Tamaño_End_Act %>% group_by(Tamaño) %>% summarise(Total_End_Act=sum(Endeudamiento_del_Activo, na.rm = TRUE)) %>%  view()
-
 Tamaño_End_Act <- Tamaño_End_Act %>% filter(Tamaño == "MICRO" | Tamaño == "PEQUEÑA" | Tamaño == "GRANDE")
-
 Tamaño_End_Act <- Tamaño_End_Act %>% spread(key = Tamaño, value = Total_End_Act) %>% 
-  mutate(MICRO_PEQUE = MICRO + PEQUEÑA) %>% select(MICRO_PEQUE,GRANDE) %>% view("VS")
-
+                                     mutate(MICRO_PEQUE = MICRO + PEQUEÑA) %>% select(MICRO_PEQUE,GRANDE) %>% view("VS")
 names(Tamaño_End_Act)
 
 Tamaño_End_Act<-Tamaño_End_Act %>% gather(key="Tamaño",value = "Total_End_Act", MICRO_PEQUE:GRANDE) %>% 
-  view("VS")
-
+                                     view("VS")
 Tamaño_End_Act %>% ggplot(aes(x = Tamaño, y=Total_End_Act, fill = Tamaño))+
-  geom_bar(stat = "identity")+
-  labs(title = "Comparacion entre Grande y Micro-pequeña Empresas",x = "Tamaño", y = "Endeudamiento del Activo")+
-  theme_bw()+
-  theme(legend.position = "none")
-
-
+                          geom_bar(stat = "identity")+
+                          labs(title = "Comparacion entre Grande y Micro-pequeña Empresas",x = "Tamaño", y = "Endeudamiento del Activo")+
+                          theme_bw()+
+                          theme(legend.position = "none")
 
 #Describe el top 10 de Empresas con mayor Apalancamiento.
 
 top_10_Apal <- EMPRESAS_FIL %>% group_by(Empresas) %>% arrange(desc(Apalancamiento)) %>% head(10) %>% view("top10_apal")
-
 top_10_Apal$n <- rep(1:10)
 
 top_10_Apal %>% ggplot(aes(x= n,
                            y = Apalancamiento, fill = Empresas))+
-  geom_bar(stat = "identity")+
-  labs(title = "Las 10 Mayores Empresas con Apalancamiento",x = "Empresas", y = "Apalancamiento")+
-  theme_bw()+
-  theme(legend.position = "none")
+                          geom_bar(stat = "identity")+
+                          labs(title = "Las 10 Mayores Empresas con Apalancamiento",x = "Empresas", y = "Apalancamiento")+
+                          theme_bw()+
+                          theme(legend.position = "none")
 
 
 #Crea una tabla resumiendo el número total de empresas por actividad económica y por actividad económica por cada cantón.
 
 Empresas_Actv_Econ <- empresas %>% select(Empresas,Actividad_económica,Cantón) %>% group_by(Actividad_económica) %>% count(Empresas) %>% group_by(Actividad_económica) %>% summarise(Total_empresas_por_actv=sum(n, na.rm = TRUE)) %>%  view("1")
-
-
 Empresas_Actv_Econ_2<- empresas %>%  select(Empresas,Actividad_económica, Cantón) %>% group_by(Cantón) %>% count(Actividad_económica) %>% view("2")
-
-
 Union <- left_join(Empresas_Actv_Econ,Empresas_Actv_Econ_2, by ="Actividad_económica") %>% view()
 
 Tabla_Resumida <- tibble::as_tibble(Union)
@@ -123,7 +110,7 @@ Tabla_Resumida <- tibble::as_tibble(Union)
 
 Union %>% ggplot(aes(x= Actividad_económica,
                      y = Total_empresas_por_actv, fill = Cantón))+
-  geom_bar(stat = "identity")+
-  labs(title = "Resumen de la actividad economica de las empresas por canton",x = "Actividad Economica", y = "Total")+
-  theme_bw()+
-  theme(legend.position = "none")
+                     geom_bar(stat = "identity")+
+                     labs(title = "Resumen de la actividad economica de las empresas por canton",x = "Actividad Economica", y = "Total")+
+                     theme_bw()+
+                     theme(legend.position = "none")
