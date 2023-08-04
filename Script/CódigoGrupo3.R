@@ -5,20 +5,22 @@ library(openxlsx)
 library (tidyverse)
 library(magrittr)
 library(ggplot2)
+
 #Cargar la data
 empresas<-read.xlsx("Datos/balances_2014.xlsx")
 #Convertir a tibble
 EMPRESAS_T <-tibble:: as_tibble(empresas)
-#Se renombró las variables para calcular los indicadores financieros
+
+#Construcción data con indicadores financieros (incluye valores "inf")----
 #Seleccionar y renombrar columnas a usar
 EMPRESAS_FIL <- EMPRESAS_T %>% 
     select(Empresas = nombre_cia, Status = situacion, Tipo_de_empresa = tipo, 
            País = pais, Provincia = provincia, Cantón = canton, Ciudad = ciudad, 
            Actividad_económica = ciiu4_nivel1, Subactividad = ciiu4_nivel6, 
            Activo_corriente = v345, Pasivo_corriente = v539, Pasivo= v599, 
-           Activo = v499, Patrimonio = v698, Activo_no_Corriente = v498) %>% #view("data_filtrada")
+           Activo = v499, Patrimonio = v698, Activo_no_Corriente = v498) %>% view("data_filtrada")
   
-#Calculo de indicadores financieros  #OBSERVACION EL CALCULO
+#Calculo de indicadores financieros  
     mutate(Liquidez_corriente = Activo_corriente/Pasivo_corriente) %>% #view() 
     mutate(Endeudamiento_del_Activo = Pasivo/Activo) %>% 
     mutate(Endeudamiento_patrimonial = Pasivo/Patrimonio) %>%  
@@ -32,4 +34,22 @@ EMPRESAS_OK <- EMPRESAS_FIL %>% select(-Activo_corriente, -Pasivo_corriente, -Pa
 #Eliminar observaciones que contengan NA de la data
 EMPRESAS_SIN_NA <- drop_na(EMPRESAS_OK) %>% view("sinNA")
 
- 
+
+#Construcción de la data para hacer las tablas y gráficas (sin 0, NA, ni inf)----
+data_sin_ceros <- EMPRESAS_T %>% 
+  select(Empresas = nombre_cia, Status = situacion, Tipo_de_empresa = tipo, 
+         País = pais, Provincia = provincia, Cantón = canton, Ciudad = ciudad, 
+         Actividad_económica = ciiu4_nivel1, Subactividad = ciiu4_nivel6, 
+         Activo_corriente = v345, Pasivo_corriente = v539, Pasivo= v599, 
+         Activo = v499, Patrimonio = v698, Activo_no_Corriente = v498) %>% 
+  filter(Pasivo_corriente != 0, Activo != 0, Patrimonio != 0, Activo_no_Corriente != 0) %>% 
+  mutate(Liquidez_corriente = Activo_corriente/Pasivo_corriente,
+                          Endeudamiento_del_Activo = Pasivo/Activo, 
+                          Endeudamiento_patrimonial = Pasivo/Patrimonio,
+                          Endeudamiento_del_activo_fijo = Patrimonio/Activo_no_Corriente,
+                          Apalancamiento = Activo/Patrimonio) %>% view() #%>% view("indicadoresF")
+
+data_ok <- data_sin_ceros %>% select(-Activo_corriente, -Pasivo_corriente, -Pasivo,
+                                     -Activo,-Patrimonio, -Activo_no_Corriente) %>% view()
+
+
