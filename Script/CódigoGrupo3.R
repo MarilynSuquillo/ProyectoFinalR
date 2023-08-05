@@ -81,16 +81,16 @@ Tamaño_End_Act %>% ggplot(aes(x = Tamaño, y=Total_End_Act, fill = Tamaño))+
 #Describe el top 10 de Empresas con mayor Apalancamiento.
 #Tabla
 top_10_Apal <- data_ok %>% select(Empresas, Apalancamiento) %>% 
-  arrange(desc(Apalancamiento)) %>% head(10) %>% view()
-
+  arrange(desc(Apalancamiento)) %>% head(10)%>% view()
+  
+  
 #Gráfica
-top_10_Apal %>% ggplot(aes(x= n,
-                           y = Apalancamiento, fill = Empresas))+
+top_10_Apal %>% ggplot(aes(Apalancamiento,
+                           y = Empresas, fill = Empresas))+
   geom_bar(stat = "identity")+
-  labs(title = "Las 10 Mayores Empresas por Apalancamiento",x = "Empresas", y = "Apalancamiento")+
+  labs(title = "Las 10 Empresas con Mayor Apalancamiento ",x = "Apalancamiento", y = "Empresas")+
   theme_bw()+
   theme(legend.position = "none")
-
 
 #Crea una tabla resumiendo el número total de empresas por actividad económica y por actividad económica por cada cantón.
 
