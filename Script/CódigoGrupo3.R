@@ -68,8 +68,7 @@ Tamaño_End_Act <- Tamaño_End_Act %>% filter(Tamaño == "MICRO" | Tamaño == "P
 Tamaño_End_Act <- Tamaño_End_Act %>% spread(key = Tamaño, value = Total_End_Act) %>% 
   mutate(MICRO_PEQUE = MICRO + PEQUEÑA) %>% select(MICRO_PEQUE,GRANDE) %>% view("VS")
 
-Tamaño_End_Act<-Tamaño_End_Act %>% gather(key="Tamaño",value = "Total_End_Act", MICRO_PEQUE:GRANDE) %>% 
-  view("VS")
+Tamaño_End_Act<-Tamaño_End_Act %>% gather(key="Tamaño",value = "Total_End_Act") %>% view("VS")
 
 #Gráfica
 Tamaño_End_Act %>% ggplot(aes(x = Tamaño, y=Total_End_Act, fill = Tamaño))+
