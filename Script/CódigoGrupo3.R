@@ -2,7 +2,7 @@
 #Karla Marilyn Suquillo Morales
 #Milka Adriana Chasi Jimenez
 #Anshela Melania Castillo Nicolalde
-install.packages("rmarkdown")
+
 #cargar paquetes----
 library(tidyverse)
 library(openxlsx)
@@ -10,7 +10,6 @@ library(readr)
 library(dplyr)
 library(readxl)
 library(ggplot2)
-library(rmarkdown)
 
 #PARTE 1----------------------------------------------------------------------------------------------
 #Construcción data con indicadores financieros----
@@ -72,42 +71,6 @@ empresas$trab_admin<-data_balances_limpio$trab_admin
 PM<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% filter(tamanio=="PEQUEÑA" | tamanio=="MICRO") 
 PM_limpio<-PM [ is.finite(PM$Endeudamiento_del_activo), ]
 E_activo_PM<-sum(PM_limpio$Endeudamiento_del_activo, na.rm = TRUE)
-
-#Analisis sobre las preguntas ----
-
-# ¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?
-#Tabla
-Tamaño_End_Act <- data_ok %>% 
-  select(Empresas,Tamaño, Endeudamiento_del_Activo) 
-Tamaño_End_Act <- Tamaño_End_Act %>% group_by(Tamaño) %>% summarise(Total_End_Act=sum(Endeudamiento_del_Activo, na.rm = TRUE)) 
-Tamaño_End_Act <- Tamaño_End_Act %>% filter(Tamaño == "MICRO" | Tamaño == "PEQUEÑA" | Tamaño == "GRANDE")
-Tamaño_End_Act <- Tamaño_End_Act %>% spread(key = Tamaño, value = Total_End_Act) %>% 
-  mutate(MICRO_PEQUE = MICRO + PEQUEÑA) %>% select(MICRO_PEQUE,GRANDE) %>% view("VS")
-
-Tamaño_End_Act<-Tamaño_End_Act %>% gather(key="Tamaño",value = "Total_End_Act") %>% view("VS")
-
-#Gráfica
-Tamaño_End_Act %>% ggplot(aes(x = Tamaño, y=Total_End_Act, fill = Tamaño))+
-  geom_bar(stat = "identity")+
-  labs(title = "Comparacion entre Grande y Micro-pequeña Empresas",x = "Tamaño", y = "Endeudamiento del Activo")+
-  theme_bw()+
-  theme(legend.position = "none")
-
-#Describe el top 10 de Empresas con mayor Apalancamiento.
-#Tabla
-top_10_Apal <- data_ok %>% select(Empresas, Apalancamiento) %>% 
-  arrange(desc(Apalancamiento)) %>% head(10)%>% view()
-  
-  
-#Gráfica
-top_10_Apal %>% ggplot(aes(Apalancamiento,
-                           y = Empresas, fill = Empresas))+
-  geom_bar(stat = "identity")+
-  labs(title = "Las 10 Empresas con Mayor Apalancamiento ",x = "Apalancamiento", y = "Empresas")+
-  theme_bw()+
-  theme(legend.position = "none")
-
-#Crea una tabla resumiendo el número total de empresas por actividad económica y por actividad económica por cada cantón.
 
 G<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% filter(tamanio=="GRANDE") 
 E_activo_G<-sum(G$Endeudamiento_del_activo, na.rm = TRUE)
@@ -248,7 +211,5 @@ ggplot(empresas, aes(x = Tipo_de_empresa)) +
        x = "Tipo de Empresa", y = "Valor",
        color = "Indicadores Financieros") +  # Cambiar el título de la leyenda
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-
 
 
