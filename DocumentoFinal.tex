@@ -1,0 +1,378 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Informe\_Final},
+  pdfauthor={Anshela Castillo, Milka Chasi, Marilyn Suquillo},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Informe\_Final}
+\author{Anshela Castillo, Milka Chasi, Marilyn Suquillo}
+\date{2023-08-06}
+
+\begin{document}
+\maketitle
+
+\{=html\}
+
+\{r setup, include=FALSE\} knitr::opts\_chunk\$set(echo = TRUE)
+
+\hypertarget{proyecto-final-del-muxf3dulo---introducciuxf3n-a-programaciuxf3n-en-r}{%
+\subsection{Proyecto final del módulo - Introducción a programación en
+R}\label{proyecto-final-del-muxf3dulo---introducciuxf3n-a-programaciuxf3n-en-r}}
+
+\hypertarget{introducciuxf3n}{%
+\subsubsection{Introducción}\label{introducciuxf3n}}
+
+Una visión cuantitativa de la salud financiera de las empresas puede ser
+proporcionada empleando los ratios o indicadores financieros. Los
+indicadores financieros son herramientas clave en el análisis económico
+de las empresas porque permiten evaluar su eficiencia operativa, la
+liquidez, rentabilidad y solidez. Estas herramientas, básicamente, son
+relaciones matemáticas entre diferentes elementos de los estados
+financieros. Entre los diferentes tipos de indicadores tenemos 1) los
+indicadores de liquidez, que evalúan la capacidad de las empresas para
+cumplir con sus obligaciones a corto plazo: es decir, evalúan si la
+empresa tiene suficientes recursos disponibles para pagar sus deudas y
+gastos operativos. Además, reflejan la disponibilidad de activos
+líquidos en relación con los pasivos de corto plazo.; 2) los indicadores
+de gestión, que miden la eficiencia con la que una empresa utiliza sus
+recursos para generar ingresos y beneficios para identificar áreas en
+las que pueden mejorar su eficiencia operativa y optimizar recursos. Un
+ejemplo es el margen de utilidad neta; 3) los indicadores de solvencia,
+que evalúan la capacidad de una empresa para cumplir con sus
+obligaciones financieras a largo plazo teniendo en cuenta sus activos y
+pasivos. Estos indicadores reflejan la estructura de capital de la
+empresa y su nivel de endeudamiento, y son cruciales para determinar si
+una empresa tiene la capacidad para pagar sus deudas a largo plazo y
+mantener su estabilidad financiera; 4) los indicadores de rentabilidad,
+que miden la capacidad de una empresa para generar beneficios en
+relación con sus ingresos y activos. El ROI es un ejemplo común que
+muestra el rendimiento de la inversión en términos de ganancias
+generadas (Garcés, 2019; Lee, 2023, Párraga et al., 2021). La
+importancia de un análisis financiero es la aplicación de estrategias
+que permitan visualizar el nivel de liquidez, solvencia, endeudamiento y
+rentabilidad en la actividad empresarial, evaluando el rendimiento de un
+negocio. Esta herramienta facilita la toma de decisiones. En la
+actualidad, los análisis de finanzas, empleando indicadores financieros,
+pueden ser calculados a través de la Ciencia de datos que se sirve de
+software o lenguajes de programación para su análisis. Contar con
+información detallada y analizada de estos indicadores, permite a las
+empresas tomar decisiones claras y acertadas en un plan de acción que
+permita identificar sus puntos fuertes y débiles empresariales comparada
+con otros negocios (Párraga et al., 2021).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{objetivo}{%
+\subsubsection{Objetivo}\label{objetivo}}
+
+\hypertarget{el-presente-trabajo-tiene-como-objetivo-calcular-los-indicadores-financieros-de-varias-empresas-empleando-el-lenguaje-de-programaciuxf3n-r-para-analizar-su-impacto-en-micro-pequeuxf1as-y-grandes-empresas.}{%
+\subsection{El presente trabajo tiene como objetivo calcular los
+indicadores financieros de varias empresas empleando el lenguaje de
+programación R para analizar su impacto en micro, pequeñas y grandes
+empresas.}\label{el-presente-trabajo-tiene-como-objetivo-calcular-los-indicadores-financieros-de-varias-empresas-empleando-el-lenguaje-de-programaciuxf3n-r-para-analizar-su-impacto-en-micro-pequeuxf1as-y-grandes-empresas.}}
+
+\hypertarget{preguntas-de-investigaciuxf3n}{%
+\subsubsection{Preguntas de
+investigación}\label{preguntas-de-investigaciuxf3n}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  ¿El endeudamiento del activo fue mayor en empresas micro + pequeñas
+  vs.~grandes?
+\item
+  ¿La liquidez por tipo de compañía es diferente entre aquellas empresas
+  que tienen más de 60 trabajadores directos y que cuenta con 100 a 800
+  trabajadores administrativos?
+\item
+  ¿Cuáles son las 10 empresas con mayor apalancamiento?
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{descripciuxf3n-de-los-datos}{%
+\subsubsection{Descripción de los
+datos}\label{descripciuxf3n-de-los-datos}}
+
+Creación del repositorio El repositorio se creó en GITHUB con el nombre
+``Proyecto Final R'', el mismo que consta de carpetas específicas: 1)
+Datos, donde se alojó los datos que posteriormente se usaron para el
+desarrollo del presente trabajo, 2) Script, donde se guardó el código
+programado en R y 3) Plots, donde se guardó las 3 gráficas generadas que
+responden a las preguntas de investigación. Posterior a la creación, se
+compartió y se clonó dos veces para trabajar de manera remota en el
+mismo.
+
+Escritura del código en R. Una vez que se instalaron y se cargaron los
+paquetes (tidyverse, openxlsx, readr, dplyr, readxl, ggplot2) se
+procedió a cargar la data (balances\_2014.xlsx: 47033 observaciones de
+347 variables) que fue almacenada en el objeto ``empresas'' y
+conjuntamente fue convertida a un tibble. A continuación, se verificó si
+existen datos faltantes. Para la limpieza de la data se ejecutó un bucle
+que A continuación, se realizó un Re shape para crear o construir la
+data base, la cual fue guardada en el objeto ``empresas. La construcción
+consta de 2 fases: calcular los indicadores financieros, seleccionar las
+columnas necesarias y finalmente renombrarlas. Los verbos de dplyr que
+se usaron para completar estas fases select y mutate, junto con rename y
+operaciones matemáticas. Esta base fue la base a ser empleada para la
+construcción de las gráficas y responder las preguntas.
+
+Preguntas.\\
+Para la pregunta uno, fue clave emplear la función is.finite porque es
+util cuando se trabaja con conjuntos de datos que contengan valores
+infitos o NA, cómo es el caso actual en la data ``empresas''. Además,
+tambien se eliminó los valores NA empleando na.rm =TRUE.\\
+Para la pregunta dos, del mismo modo se usó las funciones empleadas
+anteriormete y, en adición, se emplearon funciones cómo group by y
+filter. Para la pregunta tres, del mismo modo se empleó la función
+is.finite, arrange y head. En las tres preguntas se empleó la fúncion
+ggplot con sus respectivos argumentos para obtener las gráficas
+respectivas.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{0.7639}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\#\#\# Análisis \emph{Parte 1 - Preguntas de investigación} Primero, a
+la data base obtenida anteriormente se le añadió las columnas necesarias
+Pregunta 1 ¿El endeudamiento del activo fue mayor en empresas micro +
+pequeñas vs.~grandes? \{r message=FALSE, warning=FALSE\}
+PM\textless-empresas \%\textgreater\%
+select(tamanio,Endeudamiento\_del\_activo) \%\textgreater\%
+filter(tamanio==``PEQUEÑA'' \textbar{} tamanio==``MICRO'')
+PM\_limpio\textless-PM {[}
+is.finite(PM\(Endeudamiento_del_activo), ] E_activo_PM<-sum(PM_limpio\)Endeudamiento\_del\_activo,
+na.rm = TRUE) \\
+En la gráfica se puede observar que entre las empresas micros y pequeñas
+poseen un total de endeudamiento del activo alto; en proporción relativa
+total esto representa alrededor del 92\% de empresas con mayor
+endeudamiento del activo. Sin embargo, cuando analizamos las empresas
+grandes no alcanzan a cubrir ni la cuarta parte de endeudamiento del
+activo de las empresas micro más pequeñas. En cifras esto sería
+aproximadamente el 8\% de endeudamiento del activo en empresas
+grandes. \\
+Pregunta 2 ¿La liquidez por tipo de compañía es diferente entre aquellas
+empresas que tienen más de 60 trabajadores directos y que cuenta con 100
+a 800 trabajadores administrativos? \{r message=FALSE, warning=FALSE\}
+PM\textless-empresas \%\textgreater\%
+select(tamanio,Endeudamiento\_del\_activo) \%\textgreater\%
+filter(tamanio==``PEQUEÑA'' \textbar{} tamanio==``MICRO'')
+PM\_limpio\textless-PM {[}
+is.finite(PM\(Endeudamiento_del_activo), ] E_activo_PM<-sum(PM_limpio\)Endeudamiento\_del\_activo,
+na.rm = TRUE) \\
+G\textless-empresas \%\textgreater\%
+select(tamanio,Endeudamiento\_del\_activo) \%\textgreater\%
+filter(tamanio==``GRANDE'')
+E\_activo\_G\textless-sum(G\$Endeudamiento\_del\_activo, na.rm =
+TRUE) \\
+RESULTADOS\textless-data.frame( Tipo\_empresa = c(``Micro + Pequeñas'',
+``Grandes''), Endeudamiento=c(E\_activo\_PM,E\_activo\_G) ) \\
+ggplot(RESULTADOS, aes(x = Tipo\_empresa, y = Endeudamiento)) +
+geom\_bar(stat = ``identity'', fill= ``blue'') + labs(title =
+``Endeudamiento del activo en empresas según el tamaño'', x = ``Tamaño
+empresa'', y = ``Endeudamiento del activo'') + theme\_minimal() \\
+En la gráfica se puede observar una gran diferencia. Las empresas que
+cuenta con 100-800 trabajadores adminitrativos tienen mayor liquidez, en
+comparación con aquellas que poseen 60 trabajadores directos. \\
+Pregunta 3 ¿Cuáles son las 10 empresas con mayor apalancamiento? \{r
+message=FALSE, warning=FALSE\} TOP\_APAL\textless-empresas
+\%\textgreater\% select(Empresas,Apalancamiento)
+TOP\_APAL\_limpio\textless- TOP\_APAL{[}
+is.finite(TOP\_APAL\$Apalancamiento), {]} \\
+TOP\_ordenados\textless-TOP\_APAL\_limpio \%\textgreater\%
+arrange(desc(Apalancamiento))
+TOP\_10\textless-head(TOP\_ordenados,10) \\
+ggplot(TOP\_10, aes(x = Apalancamiento, y =
+reorder(Empresas,Apalancamiento))) + geom\_bar(stat = ``identity'',
+fill= ``red'') + labs(title = ``10 empresas mejor apalancadas'', x =
+``Apalancamiento'', y = ``Empresas'') + theme(axis.text.x =
+element\_text(angle = 45, hjust = 1)) \\
+Se puede observar que la emprea con mayor apalancamiento es Adelca del
+Litoral S. A, seguida por Faribal Holding Corp, Hiroky S. A, y
+Megatropic S.A. Dentro del top 10, la empresa con menor apalancamiento
+es Ecuadesk SA. \\
+\emph{Parte 2 - Tareas específicas} \\
+1. Utilizando los datos de balance 2014 genera un tibble que denomines
+empresas El tibble empresas, es una base de datos que alberga 46578
+observaciones de 347 variables. La misma que puede ser visualizada en la
+consola de R al ejecutar el código: \{r message=FALSE, warning=FALSE\}
+view(``empresas) \\
+2. Crea una tabla resumiendo el número total de empresas pro actividad
+económica y por actividad económica por cantón (dataframe o tibble en tu
+script) \{r message=FALSE, warning=FALSE\} data\_2\textless-
+as\_tibble(read.xlsx(``Datos/ciiu.xlsx'')) data\_2\textless- data\_2
+\%\textgreater\% filter(CODIGO==``A'' \textbar{} CODIGO==``B''
+\textbar{} CODIGO==``C''\textbar{}
+CODIGO==``D''\textbar CODIGO==``E''\textbar{}
+CODIGO==``F''\textbar CODIGO==``G''\textbar CODIGO==``H''\textbar CODIGO==``I''\textbar CODIGO==``J''\textbar CODIGO==``K''\textbar{}
+CODIGO==``L''\textbar CODIGO==``M''\textbar CODIGO==``N''\textbar CODIGO==``O''\textbar CODIGO==``P''\textbar CODIGO==``Q''\textbar{}
+CODIGO==``R''\textbar CODIGO==``S''\textbar CODIGO==``T''\textbar CODIGO==``U''\textbar CODIGO==``Z'')
+data\_2\textless-data\_2 \%\textgreater\%select(CODIGO,DESCRIPCION) \\
+data\_3\textless-empresas \%\textgreater\% select(Actividad\_económica)
+tabla1\textless-data\_3 \%\textgreater\% group\_by(Actividad\_económica)
+\%\textgreater\% summarise(Ntotal\_emp\_Actividad\_eco=n())
+\%\textgreater\%
+left\_join(data\_2,by=c(``Actividad\_económica''=``CODIGO''))
+tabla1\textless-select(tabla1,Actividad\_económica,DESCRIPCION,Ntotal\_emp\_Actividad\_eco)
+tabla1 \\
+tabla2\textless-empresas\%\textgreater\%
+group\_by(Actividad\_económica,Cantón) \%\textgreater\%
+summarise(Ntotal\_empresas\_ecoycanton=n()) \%\textgreater\%
+left\_join(data\_2,by=c(``Actividad\_económica''=``CODIGO''))
+tabla2\textless-select(tabla2,Actividad\_económica,DESCRIPCION,Cantón,Ntotal\_empresas\_ecoycanton) \\
+3. Gráficamente muestra el comparativo de los indicadores financieros de
+liquidez y solvencia por Status y provincia. \{r message=FALSE,
+warning=FALSE\} ggplot(empresas, aes(x =Provincia, y =
+Liquidez\_corriente,fill=Status)) + geom\_bar(stat = ``summary'',
+position = ``stack'')+ labs(title = ``liquidez\_corriente por Status y
+Provincia'', x = ``Provincia'', y = ``Liquidez\_corriente'') +
+theme(axis.text.x = element\_text(angle = 45, hjust = 1)) \\
+ggplot(empresas, aes(x =Provincia, y =
+Endeudamiento\_del\_activo,fill=Status)) + geom\_bar(stat = ``summary'',
+position = ``stack'') + labs(title = ``Endeudamiento del activo por
+Status y Provincia'', x = ``Provincia'', y = ``Endeudamiento del
+activo'') + theme(axis.text.x = element\_text(angle = 45, hjust = 1)) \\
+ggplot(empresas, aes(x =Provincia, y =
+Endeudamiento\_patrimonial,fill=Status)) + geom\_bar(stat = ``summary'',
+position = ``stack'') + labs(title = ``Endeudamiento patrimonial por
+Status y Provincia'', x = ``Provincia'', y = ``Endeudamiento
+patrimonial'') + theme(axis.text.x = element\_text(angle = 45, hjust =
+1)) \\
+ggplot(empresas, aes(x =Provincia, y =
+Endeudamiento\_del\_Activo\_Fijo,fill=Status)) + geom\_bar(stat =
+``summary'', position = ``stack'') + labs(title =
+``Endeudamiento\_del\_Activo\_Fijo por Status y Provincia'', x =
+``Provincia'', y = ``Endeudamiento\_del\_Activo\_Fijo'') +
+theme(axis.text.x = element\_text(angle = 45, hjust = 1)) \\
+ggplot(empresas, aes(x =Provincia, y = Apalancamiento,fill=Status)) +
+geom\_bar(stat = ``summary'', position = ``stack'') + labs(title =
+``Comparativo de Apalancamiento por Status y Provincia'', x =
+``Provincia'', y = ``Apalancamiento'') + theme(axis.text.x =
+element\_text(angle = 45, hjust = 1)) 4. Gráficamente muestra el
+comparativo de los indicadores financieros de liquidez y sovencia por
+tipo de empresa. \{r message=FALSE, warning=FALSE\} ggplot(empresas,
+aes(x = Tipo\_de\_empresa)) + geom\_line(aes(y = Liquidez\_corriente,
+group = 1, color = ``Liquidez Corriente''), stat = ``summary'', fun =
+``mean'', position = ``dodge'', size = 1) + geom\_point(aes(y =
+Liquidez\_corriente, group = 1, color = ``Liquidez Corriente''), stat =
+``summary'', fun = ``mean'', position = ``dodge'', size = 3) +
+geom\_line(aes(y = Endeudamiento\_del\_activo, group = 1, color =
+``Endeudamiento del Activo''), stat = ``summary'', fun = ``mean'',
+position = ``dodge'', size = 1) + geom\_point(aes(y =
+Endeudamiento\_del\_activo, group = 1, color = ``Endeudamiento del
+Activo''), stat = ``summary'', fun = ``mean'', position = ``dodge'',
+size = 3)+ geom\_line(aes(y = Endeudamiento\_patrimonial, group = 1,
+color = ``Endeudamiento Patrimonial''), stat = ``summary'', fun =
+``mean'', position = ``dodge'', size = 1) + geom\_line(aes(y =
+Endeudamiento\_del\_Activo\_Fijo, group = 1, color = ``Endeudamiento del
+Activo Fijo''), stat = ``summary'', fun = ``mean'', position =
+``dodge'', size = 1) + geom\_line(aes(y = Apalancamiento, group = 1,
+color = ``Apalancamiento''), stat = ``summary'', fun = ``mean'',
+position = ``dodge'', size = 1) + geom\_point(aes(y =
+Endeudamiento\_patrimonial, group = 1, color = ``Endeudamiento
+Patrimonial''), stat = ``summary'', fun = ``mean'', position =
+``dodge'', size = 3) + geom\_point(aes(y =
+Endeudamiento\_del\_Activo\_Fijo, group = 1, color = ``Endeudamiento del
+Activo Fijo''), stat = ``summary'', fun = ``mean'', position =
+``dodge'', size = 3) + geom\_point(aes(y = Apalancamiento, group = 1,
+color = ``Apalancamiento''), stat = ``summary'', fun = ``mean'',
+position = ``dodge'', size = 3)+ scale\_color\_manual(values =
+c(``Liquidez Corriente'' = ``blue'', ``Endeudamiento del Activo'' =
+``red'', ``Endeudamiento Patrimonial'' = ``green'', ``Endeudamiento del
+Activo Fijo'' = ``orange'', ``Apalancamiento'' = ``purple'')) +
+theme\_minimal() + labs(title = ``Comparativo de los indicadores
+financieros de liquidez y solvencia por tipo de empresa'', x = ``Tipo de
+Empresa'', y = ``Valor'', color = ``Indicadores Financieros'') + \#
+Cambiar el título de la leyenda theme(axis.text.x = element\_text(angle
+= 45, hjust = 1)) \\
+\end{longtable}
+
+\hypertarget{conclusiuxf3n}{%
+\subsubsection{Conclusión}\label{conclusiuxf3n}}
+
+Los indicadores financieros calculado para las empresas nos permite
+concluir que son micro y pequeñas empresas las que tienen una alta
+capacidad de endeudamiento, incurriendo en un mayor riesgo, en
+comparación con las empresas grandes; es decir, los activos de las micro
+y pequeñas empresas se financian a través de deuda. Además, son las
+grandes empresas con mayor número de trabajadores las que tienen mayor
+liquidez. Finalmente, empresas grandes como ADELCA, una empresa
+siderúrgica, supera altamente a las demás empresas analizadas en
+referencia al apalancamiento.
+
+\end{document}

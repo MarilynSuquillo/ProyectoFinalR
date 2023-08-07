@@ -1,0 +1,205 @@
+---
+title: "Informe_Final"
+author: "Anshela Castillo, Milka Chasi, Marilyn Suquillo"
+date: "2023-08-06"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+{=html}
+<style>
+  body {
+    text-align: justify;
+  }
+</style>
+
+{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+## Proyecto final del módulo - Introducción a programación en R
+
+### Introducción
+
+Una visión cuantitativa de la salud financiera de las empresas puede ser proporcionada empleando los ratios o indicadores financieros. Los indicadores financieros son herramientas clave en el análisis económico de las empresas porque permiten evaluar su eficiencia operativa, la liquidez, rentabilidad y solidez. Estas herramientas, básicamente, son relaciones matemáticas entre diferentes elementos de los estados financieros. Entre los diferentes tipos de indicadores tenemos 1) los indicadores de liquidez, que evalúan la capacidad de las empresas para cumplir con sus obligaciones a corto plazo: es decir, evalúan si la empresa tiene suficientes recursos disponibles para pagar sus deudas y gastos operativos. Además, reflejan la disponibilidad de activos líquidos en relación con los pasivos de corto plazo.; 2) los indicadores de gestión, que miden la eficiencia con la que una empresa utiliza sus recursos para generar ingresos y beneficios para identificar áreas en las que pueden mejorar su eficiencia operativa y optimizar recursos. Un ejemplo es el margen de utilidad neta; 3) los indicadores de solvencia, que evalúan la capacidad de una empresa para cumplir con sus obligaciones financieras a largo plazo teniendo en cuenta sus activos y pasivos. Estos indicadores reflejan la estructura de capital de la empresa y su nivel de endeudamiento, y son cruciales para determinar si una empresa tiene la capacidad para pagar sus deudas a largo plazo y mantener su estabilidad financiera; 4) los indicadores de rentabilidad, que miden la capacidad de una empresa para generar beneficios en relación con sus ingresos y activos. El ROI es un ejemplo común que muestra el rendimiento de la inversión en términos de ganancias generadas (Garcés, 2019; Lee, 2023, Párraga et al., 2021).
+La importancia de un análisis financiero es la aplicación de estrategias que permitan visualizar el nivel de liquidez, solvencia, endeudamiento y rentabilidad en la actividad empresarial, evaluando el rendimiento de un negocio. Esta herramienta facilita la toma de decisiones. En la actualidad, los análisis de finanzas, empleando indicadores financieros, pueden ser calculados a través de la Ciencia de datos que se sirve de software o lenguajes de programación para su análisis. Contar con información detallada y analizada de estos indicadores, permite a las empresas tomar decisiones claras y acertadas en un plan de acción que permita identificar sus puntos fuertes y débiles empresariales comparada con otros negocios (Párraga et al., 2021).
+
+------------------------------------------------------------------------
+
+### Objetivo
+
+El presente trabajo tiene como objetivo calcular los indicadores financieros de varias empresas empleando el lenguaje de programación R para analizar su impacto en micro, pequeñas y grandes empresas.  
+-----------------------------------------------------------------------
+### Preguntas de investigación  
+1. ¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?
+2. ¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?
+3. ¿Cuáles son las 10 empresas con mayor apalancamiento?
+
+------------------------------------------------------------------------
+
+### Descripción de los datos
+
+Creación del repositorio
+El repositorio se creó en GITHUB con el nombre “Proyecto Final R”, el mismo que consta de carpetas específicas: 1) Datos, donde se alojó los datos que posteriormente se usaron para el desarrollo del presente trabajo, 2) Script, donde se guardó el código programado en R y 3) Plots, donde se guardó las 3 gráficas generadas que responden a las preguntas de investigación. Posterior a la creación, se compartió y se clonó dos veces para trabajar de manera remota en el mismo.  
+
+Escritura del código en R.
+Una vez que se instalaron y se cargaron los paquetes (tidyverse, openxlsx, readr, dplyr, readxl, ggplot2) se procedió a cargar la data (balances_2014.xlsx: 47033 observaciones de 347 variables) que fue almacenada en el objeto “empresas” y conjuntamente fue convertida a un tibble. A continuación, se verificó si existen datos faltantes. Para la limpieza de la data se ejecutó un bucle que 
+A continuación, se realizó un Re shape para crear o construir la data base, la cual fue guardada en el objeto "empresas. La construcción consta de 2 fases: calcular los indicadores financieros, seleccionar las columnas necesarias y finalmente renombrarlas. Los verbos de dplyr que se usaron para completar estas fases select y mutate, junto con rename y operaciones matemáticas. Esta base fue la base a ser empleada para la construcción de las gráficas y responder las preguntas.
+
+Preguntas.  
+Para la pregunta uno, fue clave emplear la función is.finite porque es util cuando se trabaja con conjuntos de datos que contengan valores infitos o NA, cómo es el caso actual en la data "empresas". Además, tambien se eliminó los valores NA empleando na.rm =TRUE.  
+Para la pregunta dos, del mismo modo se usó las funciones empleadas anteriormete y, en adición, se emplearon funciones cómo group by y filter.
+Para la pregunta tres, del mismo modo se empleó la función is.finite, arrange y head.
+En las tres preguntas se empleó la fúncion ggplot con sus respectivos argumentos para obtener las gráficas respectivas.
+
+
+------------------------------------------------------
+### Análisis
+*Parte 1 - Preguntas de investigación*
+Primero, a la data base obtenida anteriormente se le añadió las columnas necesarias
+Pregunta 1  
+¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?  
+{r message=FALSE, warning=FALSE}  
+PM<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% filter(tamanio=="PEQUEÑA" | tamanio=="MICRO") 
+PM_limpio<-PM [ is.finite(PM$Endeudamiento_del_activo), ]
+E_activo_PM<-sum(PM_limpio$Endeudamiento_del_activo, na.rm = TRUE) 
+
+En la gráfica se puede observar que entre las empresas micros y pequeñas poseen un total de endeudamiento del activo alto; en proporción relativa total esto representa alrededor del 92% de empresas con mayor endeudamiento del activo. Sin embargo, cuando analizamos las empresas grandes no alcanzan a cubrir ni la cuarta parte de endeudamiento del activo de las empresas micro más pequeñas. En cifras esto sería aproximadamente el 8% de endeudamiento del activo en empresas grandes.    
+
+Pregunta 2  
+¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?  
+{r message=FALSE, warning=FALSE} 
+PM<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% filter(tamanio=="PEQUEÑA" | tamanio=="MICRO") 
+PM_limpio<-PM [ is.finite(PM$Endeudamiento_del_activo), ]
+E_activo_PM<-sum(PM_limpio$Endeudamiento_del_activo, na.rm = TRUE)
+
+G<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% filter(tamanio=="GRANDE") 
+E_activo_G<-sum(G$Endeudamiento_del_activo, na.rm = TRUE)
+
+RESULTADOS<-data.frame(
+  Tipo_empresa = c("Micro + Pequeñas", "Grandes"),
+  Endeudamiento=c(E_activo_PM,E_activo_G)
+)
+
+ggplot(RESULTADOS, aes(x = Tipo_empresa, y = Endeudamiento)) +
+  geom_bar(stat = "identity", fill= "blue") +
+  labs(title = "Endeudamiento del activo en empresas según el tamaño",
+       x = "Tamaño empresa", y = "Endeudamiento del activo") +
+  theme_minimal()  
+  
+  En la gráfica se puede observar una gran diferencia. Las empresas que cuenta con 100-800 trabajadores adminitrativos tienen mayor liquidez, en comparación con aquellas que poseen 60 trabajadores directos.
+
+Pregunta 3  
+¿Cuáles son las 10 empresas con mayor apalancamiento?  
+{r message=FALSE, warning=FALSE} 
+TOP_APAL<-empresas %>% select(Empresas,Apalancamiento)
+TOP_APAL_limpio<- TOP_APAL[ is.finite(TOP_APAL$Apalancamiento), ]
+
+TOP_ordenados<-TOP_APAL_limpio %>% arrange(desc(Apalancamiento)) 
+TOP_10<-head(TOP_ordenados,10)
+
+ggplot(TOP_10, aes(x = Apalancamiento, y = reorder(Empresas,Apalancamiento))) +
+  geom_bar(stat = "identity", fill= "red") +
+  labs(title = "10 empresas mejor apalancadas",
+       x = "Apalancamiento", y = "Empresas") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  
+  
+Se puede observar que la emprea con mayor apalancamiento es Adelca del Litoral S. A, seguida por Faribal Holding Corp, Hiroky S. A, y  Megatropic S.A. Dentro del top 10, la empresa con menor apalancamiento es Ecuadesk SA.
+
+*Parte 2 - Tareas específicas*
+
+1.  Utilizando los datos de balance 2014 genera un tibble que denomines empresas
+El tibble empresas, es una base de datos que alberga 46578 observaciones de 347 variables. La misma que puede ser visualizada en la consola de R al ejecutar el código:   
+{r message=FALSE, warning=FALSE} 
+view("empresas)  
+
+2.  Crea una tabla resumiendo el número total de empresas pro actividad económica y por actividad económica por cantón (dataframe o tibble en tu script)
+{r message=FALSE, warning=FALSE} 
+data_2<- as_tibble(read.xlsx("Datos/ciiu.xlsx"))
+data_2<- data_2 %>% filter(CODIGO=="A" | CODIGO=="B" | CODIGO=="C"| CODIGO=="D"|CODIGO=="E"|
+                             CODIGO=="F"|CODIGO=="G"|CODIGO=="H"|CODIGO=="I"|CODIGO=="J"|CODIGO=="K"|
+                             CODIGO=="L"|CODIGO=="M"|CODIGO=="N"|CODIGO=="O"|CODIGO=="P"|CODIGO=="Q"|
+                             CODIGO=="R"|CODIGO=="S"|CODIGO=="T"|CODIGO=="U"|CODIGO=="Z")
+data_2<-data_2 %>%select(CODIGO,DESCRIPCION)
+
+data_3<-empresas %>% select(Actividad_económica)
+tabla1<-data_3 %>% group_by(Actividad_económica) %>% summarise(Ntotal_emp_Actividad_eco=n()) %>%
+  left_join(data_2,by=c("Actividad_económica"="CODIGO"))  
+tabla1<-select(tabla1,Actividad_económica,DESCRIPCION,Ntotal_emp_Actividad_eco)
+tabla1 
+
+tabla2<-empresas%>% group_by(Actividad_económica,Cantón) %>% summarise(Ntotal_empresas_ecoycanton=n()) %>% 
+  left_join(data_2,by=c("Actividad_económica"="CODIGO"))
+tabla2<-select(tabla2,Actividad_económica,DESCRIPCION,Cantón,Ntotal_empresas_ecoycanton)
+
+3.  Gráficamente muestra el comparativo de los indicadores financieros de liquidez y solvencia por Status y provincia.
+{r message=FALSE, warning=FALSE}   
+ggplot(empresas, aes(x =Provincia, y = Liquidez_corriente,fill=Status)) +
+  geom_bar(stat = "summary", position = "stack")+ 
+  labs(title = "liquidez_corriente por Status y Provincia",
+       x = "Provincia", y = "Liquidez_corriente") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(empresas, aes(x =Provincia, y = Endeudamiento_del_activo,fill=Status)) +
+  geom_bar(stat = "summary", position = "stack") +
+  labs(title = "Endeudamiento del activo por Status y Provincia",
+       x = "Provincia", y = "Endeudamiento del activo") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(empresas, aes(x =Provincia, y = Endeudamiento_patrimonial,fill=Status)) +
+  geom_bar(stat = "summary", position = "stack") +
+  labs(title = "Endeudamiento patrimonial por Status y Provincia",
+       x = "Provincia", y = "Endeudamiento patrimonial") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(empresas, aes(x =Provincia, y = Endeudamiento_del_Activo_Fijo,fill=Status)) +
+  geom_bar(stat = "summary", position = "stack") +
+  labs(title = "Endeudamiento_del_Activo_Fijo por Status y Provincia",
+       x = "Provincia", y = "Endeudamiento_del_Activo_Fijo") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(empresas, aes(x =Provincia, y = Apalancamiento,fill=Status)) +
+  geom_bar(stat = "summary", position = "stack") +
+  labs(title = "Comparativo de Apalancamiento por Status y Provincia",
+       x = "Provincia", y = "Apalancamiento") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  
+4.  Gráficamente muestra el comparativo de los indicadores financieros de liquidez y sovencia por tipo de empresa.   
+{r message=FALSE, warning=FALSE}    
+ggplot(empresas, aes(x = Tipo_de_empresa)) +
+  geom_line(aes(y = Liquidez_corriente, group = 1, color = "Liquidez Corriente"), 
+            stat = "summary", fun = "mean", position = "dodge", size = 1) +
+  geom_point(aes(y = Liquidez_corriente, group = 1, color = "Liquidez Corriente"), 
+             stat = "summary", fun = "mean", position = "dodge", size = 3) +
+  geom_line(aes(y = Endeudamiento_del_activo, group = 1, color = "Endeudamiento del Activo"), 
+            stat = "summary", fun = "mean", position = "dodge", size = 1) +
+  geom_point(aes(y = Endeudamiento_del_activo, group = 1, color = "Endeudamiento del Activo"), 
+             stat = "summary", fun = "mean", position = "dodge", size = 3)+
+  geom_line(aes(y = Endeudamiento_patrimonial, group = 1, color = "Endeudamiento Patrimonial"), 
+            stat = "summary", fun = "mean", position = "dodge", size = 1) +
+  geom_line(aes(y = Endeudamiento_del_Activo_Fijo, group = 1, color = "Endeudamiento del Activo Fijo"), 
+            stat = "summary", fun = "mean", position = "dodge", size = 1) +
+  geom_line(aes(y = Apalancamiento, group = 1, color = "Apalancamiento"), 
+            stat = "summary", fun = "mean", position = "dodge", size = 1) +
+  geom_point(aes(y = Endeudamiento_patrimonial, group = 1, color = "Endeudamiento Patrimonial"), 
+             stat = "summary", fun = "mean", position = "dodge", size = 3) +
+  geom_point(aes(y = Endeudamiento_del_Activo_Fijo, group = 1, color = "Endeudamiento del Activo Fijo"), 
+             stat = "summary", fun = "mean", position = "dodge", size = 3) +
+  geom_point(aes(y = Apalancamiento, group = 1, color = "Apalancamiento"), 
+             stat = "summary", fun = "mean", position = "dodge", size = 3)+
+  scale_color_manual(values = c("Liquidez Corriente" = "blue", 
+                                "Endeudamiento del Activo" = "red", 
+                                "Endeudamiento Patrimonial" = "green", 
+                                "Endeudamiento del Activo Fijo" = "orange", 
+                                "Apalancamiento" = "purple")) +
+  theme_minimal() +
+  labs(title = "Comparativo de los indicadores financieros de liquidez y solvencia por tipo de empresa",
+       x = "Tipo de Empresa", y = "Valor",
+       color = "Indicadores Financieros") +  # Cambiar el título de la leyenda
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+------------------------------------------------------------------------
+
+### Conclusión  
+Los indicadores financieros calculado para las empresas nos permite concluir que son micro y pequeñas empresas las que tienen una alta capacidad de endeudamiento, incurriendo en un mayor riesgo, en comparación con las empresas grandes; es decir, los activos de las micro y pequeñas empresas se financian a través de deuda. Además, son las grandes empresas con mayor número de trabajadores las que tienen mayor liquidez. Finalmente, empresas grandes como ADELCA, una empresa siderúrgica, supera altamente a las demás empresas analizadas en referencia al apalancamiento.
