@@ -282,7 +282,7 @@ ResB<-sum(LIQ_B$Liquidez_corriente, na.rm = TRUE)
 
 LIQ_C<-empresas %>% select(Liquidez_corriente,trab_admin,Tipo_de_empresa) %>%
   group_by(Tipo_de_empresa)%>% filter(trab_admin >=100 & trab_admin <=800)
-ResC<-sum(LIQ_C_limpio$Liquidez_corriente, na.rm = TRUE)
+ResC<-sum(LIQ_C$Liquidez_corriente, na.rm = TRUE)
 
 
 L_RES<-data.frame(
