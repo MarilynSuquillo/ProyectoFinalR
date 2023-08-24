@@ -5,6 +5,30 @@ date: "2023-08-23"
 output: pdf_document
 ---
 
+## ANALIZANDO LOS INDICADORES FINANCIEROS DE EMPRESAS ECUATORIANAS DEL AÑO 2014
+
+Chasi Milka, Suquillo Marilyn\
+25- Agosto - 2023
+
+### INTRODUCCIÓN
+
+Una visión cuantitativa de la salud financiera de las empresas se obtiene al analizar los ratios o indicadores financieros. Los indicadores financieros son herramientas clave en el análisis económico de las empresas porque permiten evaluar su eficiencia operativa, iquidez, rentabilidad y solidez. Estas herramientas, básicamente, son relaciones matemáticas entre diferentes elementos de los estados financieros (Párraga et al., 2021)..\
+En la actualidad, los análisis de finanzas, empleando indicadores financieros, pueden ser calculados a través de la Ciencia de datos que se sirve de softwars o lenguajes de programación para su análisis. Contar con información detallada y analizada de los indicadores permite a las empresas tomar decisiones acertadas y ejecutar planes de acción que permitan identificar sus puntos fuertes y débiles comparada con otros negocios.
+
+### OBJETIVOS
+
+#### Objetivo General
+
+Analizar los indicadores financieros de liquidez y solvencia empleando el lenguaje de programación R para analizar su impacto en micro, pequeñas y grandes empresas ecuatorianas
+
+#### Objetivos Específicos
+
+-   Calcular el nivel de endeudamiento del activo de micro, pequeñas y medianas empresas
+
+-   Contrastar la liquidez de las empresas de acuerdo a su tipo versus a la cantidad de trabajadores.
+
+-   Mostrar las 10 mejores empresas con mayor nivel de apalancamiento
+
 ```{r Paquetes, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,message=FALSE, warning = FALSE)
 library(tidyverse)
@@ -16,7 +40,7 @@ library(readxl)
 library(ggplot2)
 ```
 
-## IMPORTACION DE LA BASE
+#### IMPORTACION DE LA BASE
 
 *"AQUI FALTA LA DESCRIPCION"*
 
@@ -25,7 +49,7 @@ data_balances<- as_tibble(read.xlsx("Datos/balances_2014.xlsx"))
 data_balances
 ```
 
-## CREACION DEL OBJETO EMPRESA
+### CREACION DEL OBJETO EMPRESA
 
 ***"AQUI FALTA LA DESCRIPCION"***
 
@@ -34,7 +58,7 @@ empresas<- as_tibble(data_balances)
 dim(empresas)
 ```
 
-## CREACION DE LOS INDICADORES
+### CREACION DE LOS INDICADORES
 
 **"AQUI FALTA LA DESCRIPCION"**
 
@@ -46,7 +70,7 @@ empresas<-mutate(empresas,Liquidez_corriente=v345/v539,
                  Apalancamiento=v499/v698)
 ```
 
-## MANIPULACION Y LIMPIEZA DE LOS DATOS
+### MANIPULACION Y LIMPIEZA DE LOS DATOS
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
@@ -78,7 +102,7 @@ empresas <- empresas[ is.finite(empresas$Endeudamiento_del_Activo_Fijo), ]
 empresas <- empresas[ is.finite(empresas$Apalancamiento), ]
 ```
 
-## SELECCION Y ASIGNACION DE NOMBRES A LAS VARIABLES
+### SELECCION Y ASIGNACION DE NOMBRES A LAS VARIABLES
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
