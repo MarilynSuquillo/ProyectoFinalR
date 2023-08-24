@@ -12,7 +12,7 @@ Chasi Milka, Suquillo Marilyn\
 
 ### INTRODUCCIÓN
 
-Una visión cuantitativa de la salud financiera de las empresas se obtiene al analizar los ratios o indicadores financieros. Los indicadores financieros son herramientas clave en el análisis económico de las empresas porque permiten evaluar su eficiencia operativa, iquidez, rentabilidad y solidez. Estas herramientas, básicamente, son relaciones matemáticas entre diferentes elementos de los estados financieros (Párraga et al., 2021)..\
+Una visión cuantitativa de la salud financiera de las empresas se obtiene al analizar los ratios o indicadores financieros. Los indicadores financieros son herramientas clave en el análisis económico de las empresas porque permiten evaluar su eficiencia operativa, liquidez, rentabilidad y solidez. Estas herramientas, básicamente, son relaciones matemáticas entre diferentes elementos de los estados financieros (Párraga et al., 2021)..\
 En la actualidad, los análisis de finanzas, empleando indicadores financieros, pueden ser calculados a través de la Ciencia de datos que se sirve de softwars o lenguajes de programación para su análisis. Contar con información detallada y analizada de los indicadores permite a las empresas tomar decisiones acertadas y ejecutar planes de acción que permitan identificar sus puntos fuertes y débiles comparada con otros negocios.
 
 ### OBJETIVOS
@@ -23,11 +23,15 @@ Analizar los indicadores financieros de liquidez y solvencia empleando el lengua
 
 #### Objetivos Específicos
 
--   Calcular el nivel de endeudamiento del activo de micro, pequeñas y medianas empresas
+-   Calcular el nivel de endeudamiento del activo de micro, pequeñas y grandes empresas
 
--   Contrastar la liquidez de las empresas de acuerdo a su tipo versus a la cantidad de trabajadores.
+-   Contrastar la liquidez de las empresas de acuerdo a su tipo vs la cantidad de trabajadores.
 
 -   Mostrar las 10 mejores empresas con mayor nivel de apalancamiento
+
+### MÉTODOS
+
+Para el análisis de datos en R, en primer lugar, se requiere cargar las siguientes librerias que albergar diversas funciones a emplearse en la presente investigación.
 
 ```{r Paquetes, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,message=FALSE, warning = FALSE)
@@ -40,27 +44,23 @@ library(readxl)
 library(ggplot2)
 ```
 
-#### IMPORTACION DE LA BASE
+#### Base de datos madre
 
-*"AQUI FALTA LA DESCRIPCION"*
+Se importó la base de datos con la cual se trabajó. se le asignó al objeto ' empresas ' y se convirtió a un tibble.
 
 ```{r data_balances}
-data_balances<- as_tibble(read.xlsx("Datos/balances_2014.xlsx"))
+data_balances<- read.xlsx("Datos/balances_2014.xlsx")
 data_balances
 ```
-
-### CREACION DEL OBJETO EMPRESA
-
-***"AQUI FALTA LA DESCRIPCION"***
 
 ```{r empresas}
 empresas<- as_tibble(data_balances)
 dim(empresas)
 ```
 
-### CREACION DE LOS INDICADORES
+#### Calculo de indicadores financieros
 
-**"AQUI FALTA LA DESCRIPCION"**
+Se empleó la función mutate para agregar nuevas variables, que corresponden a los indicadores financieros, a la base de datos
 
 ```{r empresas}
 empresas<-mutate(empresas,Liquidez_corriente=v345/v539,
@@ -70,16 +70,12 @@ empresas<-mutate(empresas,Liquidez_corriente=v345/v539,
                  Apalancamiento=v499/v698)
 ```
 
-### MANIPULACION Y LIMPIEZA DE LOS DATOS
+#### Limpieza de las variables calculadas
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Se empleó funciones de la familia is para determinar si existen valores faltantes y comprobar si los valores obtenidos, despues de filtrar y excluir los valores de cero , son finitos.
 
 ```{r empresas}
-#se determina si existen valores faltantes
 sum(is.na(empresas))
-
 #se realiza la limpieza de los datos 
 
 empresas <- empresas[!is.na(empresas$Liquidez_corriente), ]  
@@ -102,11 +98,9 @@ empresas <- empresas[ is.finite(empresas$Endeudamiento_del_Activo_Fijo), ]
 empresas <- empresas[ is.finite(empresas$Apalancamiento), ]
 ```
 
-### SELECCION Y ASIGNACION DE NOMBRES A LAS VARIABLES
+### Base de datos pulida y definitiva
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Se sellecionó, empleando la función select(), las variables necesarias y, a su vez, se las renombró en base a lo solicitado.
 
 ```{r empresas}
 empresas<- select(empresas, Empresas = nombre_cia,
