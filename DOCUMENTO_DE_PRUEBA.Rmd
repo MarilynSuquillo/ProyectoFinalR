@@ -1,9 +1,12 @@
-##Integrantes----
-#Karla Marilyn Suquillo Morales
-#Milka Adriana Chasi Jimenez
-#Anshela Melania Castillo Nicolalde
+---
+title: "ProyectoR"
+author: "Grupo3"
+date: "2023-08-23"
+output: pdf_document
+---
 
-#cargar paquetes----
+```{r Paquetes, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE, warning = FALSE)
 library(tidyverse)
 library(magrittr)
 library(openxlsx)
@@ -11,25 +14,45 @@ library(readr)
 library(dplyr)
 library(readxl)
 library(ggplot2)
+```
 
-#PARTE 1----------------------------------------------------------------------------------------------
-#Construcción data con indicadores financieros----
-#Cargar la data base
+## IMPORTACION DE LA BASE
+
+*"AQUI FALTA LA DESCRIPCION"*
+
+```{r data_balances}
 data_balances<- as_tibble(read.xlsx("Datos/balances_2014.xlsx"))
 data_balances
+```
 
+## CREACION DEL OBJETO EMPRESA
 
-#1
+***"AQUI FALTA LA DESCRIPCION"***
+
+```{r empresas}
 empresas<- as_tibble(data_balances)
 dim(empresas)
+```
 
-#Calcular los indicadores financieros
+## CREACION DE LOS INDICADORES
+
+**"AQUI FALTA LA DESCRIPCION"**
+
+```{r empresas}
 empresas<-mutate(empresas,Liquidez_corriente=v345/v539,
                  Endeudamiento_del_activo=v599/v499,
                  Endeudamiento_patrimonial=v599/v698,
                  Endeudamiento_del_Activo_Fijo=v698/v498,
                  Apalancamiento=v499/v698)
+```
 
+## MANIPULACION Y LIMPIEZA DE LOS DATOS
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r empresas}
 #se determina si existen valores faltantes
 sum(is.na(empresas))
 
@@ -53,8 +76,15 @@ empresas <- empresas[ is.finite(empresas$Endeudamiento_del_activo), ]
 empresas <- empresas[ is.finite(empresas$Endeudamiento_patrimonial), ] 
 empresas <- empresas[ is.finite(empresas$Endeudamiento_del_Activo_Fijo), ] 
 empresas <- empresas[ is.finite(empresas$Apalancamiento), ]
+```
 
-#Renombrar las columnas
+## SELECCION Y ASIGNACION DE NOMBRES A LAS VARIABLES
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r empresas}
 empresas<- select(empresas, Empresas = nombre_cia,
                   Status = situacion,
                   Tipo_de_empresa= tipo,
@@ -63,15 +93,19 @@ empresas<- select(empresas, Empresas = nombre_cia,
                   Cantón= canton, 
                   Ciudad=  ciudad,
                   Actividad_económica= ciiu4_nivel1, 
-                  Subactividad= ciiu4_nivel6, trab_direc,Liquidez_corriente,tamanio,
-                  trab_admin,Endeudamiento_del_activo,Endeudamiento_patrimonial,
+                  Subactividad= ciiu4_nivel6, trab_direc,Liquidez_corriente,tamani,                   trab_admin,Endeudamiento_del_activo,Endeudamiento_patrimonial,
                   Endeudamiento_del_Activo_Fijo,Apalancamiento) 
+```
 
-empresas
+## ANALISIS
 
-#PARTE 2----------------------------------------------------------------------------------------------
-#Respondiendo a las preguntas de investigación
+#### ENDEUDAMIENTO DEL ACTIVO MICRO MAS PEQUEÑAS FRENTE GRANDES
 
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r ENDEUDAMIENTO}
 #1. ¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?
 PM<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% filter(tamanio=="PEQUEÑA" | tamanio=="MICRO") 
 E_activo_PM<-sum(PM$Endeudamiento_del_activo, na.rm = TRUE)
@@ -83,15 +117,29 @@ RESULTADOS<-data.frame(
   Tamaño_empresa = c("Micro + Pequeñas", "Grandes"),
   Endeudamiento=c(E_activo_PM,E_activo_G)
 )
+```
 
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r ENDEUDAMIENTO DEL ACTIVO, echo=FALSE, fig.align='center', fig.width=6}
 ggplot(RESULTADOS, aes(x = Tamaño_empresa, y = Endeudamiento, fill = Tamaño_empresa)) +
   geom_bar(stat = "identity") +
   labs(x = "Tamaño empresa", y = "Endeudamiento del activo") +
   theme_minimal() + 
-  theme_bw(base_size = 11) +
+  theme_bw(base_size = 10) +
   facet_wrap(~"Endeudamiento del Activo: Micro + Peque vs Grande") + 
   theme(legend.position = "none")
+```
 
+#### LIQUIDEZ POR TIPO DE COMPAÑIA
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r LIQUIDEZ}
 #2. ¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más 
 #de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?
 
@@ -109,28 +157,48 @@ L_RES<-data.frame(
   liquidez_x_compañía= c(ResB, ResC)
 )
 
+```
+
+```{r grafico, echo=TRUE, fig.align='center', fig.width=7}
 ggplot(L_RES, aes(x = Filtros, y = liquidez_x_compañía)) +
   geom_bar(stat = "identity", fill= "blue") +
   labs(x = "Valor", y = "Liquidez") +
   theme_minimal() +
-  theme_bw(base_size = 11) +
+  theme_bw(base_size = 10) +
   facet_wrap(~"Liquidez por tipo de compañia frente a la cantidad de trabajadores") + 
   theme(legend.position = "none")
+```
 
-#3. Describe el top 10 de empresas con mayor apalancamiento.
+#### EMPRESAS CON MAYOR APALANCAMIENTO
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r APALANCAMIENTO}
 TOP_APAL<-empresas %>% select(Empresas,Apalancamiento)
 
 TOP_ordenados<-TOP_APAL %>% arrange(desc(Apalancamiento)) 
 TOP_10<-head(TOP_ordenados,10)
 
+```
+
+```{r grafico, echo=TRUE, out.width='75%', fig.align='center', fig.width=7}
 ggplot(TOP_10, aes(x = Apalancamiento, y = reorder(Empresas,Apalancamiento), fill = Empresas)) +
   geom_bar(stat = "identity") +
   labs(x = "Apalancamiento", y = "Empresas") +
-  theme_bw(base_size = 11) +   
+  theme_bw(base_size = 10) +   
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none") +
-  facet_wrap(~"Las 10 empresas con mejor apalancamiento") 
+  facet_wrap(~"Las 10 empresas con mejor apalancamiento")
+```
 
- #PARTE 3 TAREAS ESPECÍFICAS---------------------------
+#### TABLA NUMERO TOTAL DE EMPRESAS POR ACTIVIDAD Y CANTON
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r TABLA_RESUMEN}
 #Tabla resumida que contiene el número total de empresas por actividad económica y
 #por actividad económica por cada cantón.
 data_2<- as_tibble(read.xlsx("Datos/ciiu.xlsx"))
@@ -150,10 +218,11 @@ Tabla_Resumen <- TABLA %>% select(Actividad_económica,DESCRIPCION,Cantón,
       Total_empresas_por_cant = n,Total_empresas_por_actv) %>% 
       arrange(Actividad_económica, desc(Total_empresas_por_cant)) %>% 
        view("tabla_resumen")
+```
 
-#Comparativo gráfico de los indicadores financieros de liquidez y
-#solvencia por Status y provincia.
+### Comparativo gráfico de los indicadores financieros de liquidez yolvencia por Status y provincia.
 
+```{r grafico LIQUIDEZ CORRIENTE, echo=TRUE, fig.width=8, fig.align='center', warning=FALSE, message=FALSE}
 ggplot(empresas, aes(x = " ", y = Liquidez_corriente ,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") + 
   labs(title = "Liquidez_corriente por Status y Provincia",
@@ -162,8 +231,9 @@ ggplot(empresas, aes(x = " ", y = Liquidez_corriente ,fill=Status)) +
   theme_bw(base_size = 9) + 
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),legend.position = "bottom") +
   guides(fill = guide_legend(ncol = 3))
+```
 
-
+```{r grafico ENDEUDAMIENTO DEL ACTIVO, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE, fig.width=8}
 ggplot(empresas, aes(x = " ", y = Endeudamiento_del_activo,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") +
   labs(title = "Endeudamiento del activo por Status y Provincia",
@@ -172,8 +242,9 @@ ggplot(empresas, aes(x = " ", y = Endeudamiento_del_activo,fill=Status)) +
   theme_bw(base_size = 9) +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),legend.position = "bottom")+
   guides(fill = guide_legend(ncol = 3))
+```
 
-
+```{r grafico ENDEUDAMIENTO PATRIMONIAL, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE, fig.width=8}
 ggplot(empresas, aes(x = " ", y = Endeudamiento_patrimonial,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") +
   labs(title = "Endeudamiento patrimonial por Status y Provincia",
@@ -182,8 +253,9 @@ ggplot(empresas, aes(x = " ", y = Endeudamiento_patrimonial,fill=Status)) +
   theme_bw(base_size = 9) +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),legend.position = "bottom")+
   guides(fill = guide_legend(ncol = 3))
+```
 
-
+```{r grafico ENDEUDAMIENTO DEL ACTIVO FIJO, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE, fig.width=8}
 ggplot(empresas, aes(x = " ", y = Endeudamiento_del_Activo_Fijo,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") +
   labs(title = "Endeudamiento_del_Activo_Fijo por Status y Provincia",
@@ -192,21 +264,26 @@ ggplot(empresas, aes(x = " ", y = Endeudamiento_del_Activo_Fijo,fill=Status)) +
   theme_bw(base_size = 9) +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),legend.position = "bottom")+
   guides(fill = guide_legend(ncol = 3))
+```
 
-
+```{r grafico APALANCAMIENTO, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE, fig.width=8}
 ggplot(empresas, aes(x = " ", y = Apalancamiento,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") +
   labs(title = "Comparativo de Apalancamiento por Status y Provincia",
        x = " ", y = "Apalancamiento") +
   facet_wrap(~Provincia, scales = "free_y") +
-  theme_bw(base_size = 7) +
+  theme_bw(base_size = 9) +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),legend.position = "bottom")+
   guides(fill = guide_legend(ncol = 3))
+```
 
+#### Comparativo de los indicadores financieros de liquidez y solvencia por tipo de empresa
 
-# Comparativo de los indicadores financieros de liquidez y
-#solvencia por tipo de empresa.
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r grafico, echo=TRUE, fig.width=7.5, fig.align='center', warning=FALSE, message=FALSE}
 ggplot(empresas, aes(x = Tipo_de_empresa)) +
   geom_line(aes(y = Liquidez_corriente, group = 1, color = "Liquidez Corriente"), 
             stat = "summary", fun = "mean", position = "dodge", size = 1) +
@@ -238,7 +315,5 @@ ggplot(empresas, aes(x = Tipo_de_empresa)) +
        color = "Indicadores Financieros") + 
   theme_bw(base_size = 10)+
   facet_wrap(~"Comparativo de los Indicadores Financieros de Liquidez y Solvencia por Tipo de empresa")+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "right") 
-
-
-
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "right")
+```
