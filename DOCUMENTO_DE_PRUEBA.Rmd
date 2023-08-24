@@ -12,7 +12,7 @@ Chasi Milka, Suquillo Marilyn\
 
 ### INTRODUCCIÓN
 
-Una visión cuantitativa de la salud financiera de las empresas se obtiene al analizar los ratios o indicadores financieros. Los indicadores financieros son herramientas clave en el análisis económico de las empresas porque permiten evaluar su eficiencia operativa, liquidez, rentabilidad y solidez. Estas herramientas, básicamente, son relaciones matemáticas entre diferentes elementos de los estados financieros (Párraga et al., 2021)..\
+Una visión cuantitativa de la salud financiera de las empresas se obtiene al analizar los ratios o indicadores financieros. Los indicadores financierons son herramientas clave en el análisis económico de las empreas porque permite evaluar su eficiencia operativa, liquidez, rentabilidad y solidez. Estas herramientas, básicamente, son relaciones matemáticas entre diferentes elementos de los estados financieros (Párraga et al., 2021)..\
 En la actualidad, los análisis de finanzas, empleando indicadores financieros, pueden ser calculados a través de la Ciencia de datos que se sirve de softwars o lenguajes de programación para su análisis. Contar con información detallada y analizada de los indicadores permite a las empresas tomar decisiones acertadas y ejecutar planes de acción que permitan identificar sus puntos fuertes y débiles comparada con otros negocios.
 
 ### OBJETIVOS
@@ -31,7 +31,7 @@ Analizar los indicadores financieros de liquidez y solvencia empleando el lengua
 
 ### MÉTODOS
 
-Para el análisis de datos en R, en primer lugar, se requiere cargar las siguientes librerias que albergar diversas funciones a emplearse en la presente investigación.
+Para el análisis de datos en R, en primer lugar, se requiere cargar las siguientes librerias que albergan diversas funciones a emplearse en la presente investigación.
 
 ```{r Paquetes, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,message=FALSE, warning = FALSE)
@@ -46,7 +46,7 @@ library(ggplot2)
 
 #### Base de datos madre
 
-Se importó la base de datos con la cual se trabajó. se le asignó al objeto ' empresas ' y se convirtió a un tibble.
+Se importó la base de datos con la cual se trabajó. Se le asignó al objeto ' empresas ' y se convirtió a un tibble.
 
 ```{r data_balances}
 data_balances<- read.xlsx("Datos/balances_2014.xlsx")
@@ -60,7 +60,7 @@ dim(empresas)
 
 #### Calculo de indicadores financieros
 
-Se empleó la función mutate para agregar nuevas variables, que corresponden a los indicadores financieros, a la base de datos
+Se empleó la función mutate para agregar nuevas variables, que corresponden a los indicadores financieros, a la base de datos. Los códigos correctos de los numeradores y denominadores fueron referenciados de acuerdo a la base ciuu.xlsx; la misma que más adenlante será importada y cargada a R para su uso.
 
 ```{r empresas}
 empresas<-mutate(empresas,Liquidez_corriente=v345/v539,
@@ -72,7 +72,7 @@ empresas<-mutate(empresas,Liquidez_corriente=v345/v539,
 
 #### Limpieza de las variables calculadas
 
-Se empleó funciones de la familia is para determinar si existen valores faltantes y comprobar si los valores obtenidos, despues de filtrar y excluir los valores de cero , son finitos.
+Al calcular los indicadores financieros se obtenian valores inf ( debido a la división para cero) por tanto se realizó la limpieza de los datos empleando funciones de la familia is para determinar si existen valores faltantes y comprobar si los valores obtenidos, despues de filtrar y excluir los valores de cero , son finitos.
 
 ```{r empresas}
 sum(is.na(empresas))
@@ -98,9 +98,9 @@ empresas <- empresas[ is.finite(empresas$Endeudamiento_del_Activo_Fijo), ]
 empresas <- empresas[ is.finite(empresas$Apalancamiento), ]
 ```
 
-### Base de datos pulida y definitiva
+#### Base de datos pulida y definitiva
 
-Se sellecionó, empleando la función select(), las variables necesarias y, a su vez, se las renombró en base a lo solicitado.
+Se selecionó, empleando la función select(), las variables necesarias y, a su vez, se las renombró de acuerdo a lo solicitado. Ésta base asignada al objeto "empresas", la mismas que se compone de variables categóricas y numéricas, será la empleada para responder a los objetivos planteados
 
 ```{r empresas}
 empresas<- select(empresas, Empresas = nombre_cia,
@@ -111,114 +111,18 @@ empresas<- select(empresas, Empresas = nombre_cia,
                   Cantón= canton, 
                   Ciudad=  ciudad,
                   Actividad_económica= ciiu4_nivel1, 
-                  Subactividad= ciiu4_nivel6, trab_direc,Liquidez_corriente,tamani,                   trab_admin,Endeudamiento_del_activo,Endeudamiento_patrimonial,
+                  Subactividad= ciiu4_nivel6,
+                  trab_direc,Liquidez_corriente,tamanio,
+                  trab_admin,Endeudamiento_del_activo,Endeudamiento_patrimonial,
                   Endeudamiento_del_Activo_Fijo,Apalancamiento) 
 ```
 
-## ANALISIS
+#### Conociendo la data
 
-#### ENDEUDAMIENTO DEL ACTIVO MICRO MAS PEQUEÑAS FRENTE GRANDES
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r ENDEUDAMIENTO}
-#1. ¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?
-PM<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% filter(tamanio=="PEQUEÑA" | tamanio=="MICRO") 
-E_activo_PM<-sum(PM$Endeudamiento_del_activo, na.rm = TRUE)
-
-G<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% filter(tamanio=="GRANDE") 
-E_activo_G<-sum(G$Endeudamiento_del_activo, na.rm = TRUE)
-
-RESULTADOS<-data.frame(
-  Tamaño_empresa = c("Micro + Pequeñas", "Grandes"),
-  Endeudamiento=c(E_activo_PM,E_activo_G)
-)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r ENDEUDAMIENTO DEL ACTIVO, echo=FALSE, fig.align='center', fig.width=6}
-ggplot(RESULTADOS, aes(x = Tamaño_empresa, y = Endeudamiento, fill = Tamaño_empresa)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Tamaño empresa", y = "Endeudamiento del activo") +
-  theme_minimal() + 
-  theme_bw(base_size = 10) +
-  facet_wrap(~"Endeudamiento del Activo: Micro + Peque vs Grande") + 
-  theme(legend.position = "none")
-```
-
-#### LIQUIDEZ POR TIPO DE COMPAÑIA
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r LIQUIDEZ}
-#2. ¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más 
-#de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?
-
-LIQ_B<-empresas %>% select(Tipo_de_empresa,Liquidez_corriente,trab_direc) %>% 
-  group_by(Tipo_de_empresa) %>% filter(trab_direc>=60) 
-ResB<-sum(LIQ_B$Liquidez_corriente, na.rm = TRUE)
-
-LIQ_C<-empresas %>% select(Liquidez_corriente,trab_admin,Tipo_de_empresa) %>%
-  group_by(Tipo_de_empresa)%>% filter(trab_admin >=100 & trab_admin <=800)
-ResC<-sum(LIQ_C_limpio$Liquidez_corriente, na.rm = TRUE)
-
-
-L_RES<-data.frame(
-  Filtros=c("Mayor e igual a 60 trabajadores direct."," 100 a 800 trabajadores administ."),
-  liquidez_x_compañía= c(ResB, ResC)
-)
-
-```
-
-```{r grafico, echo=TRUE, fig.align='center', fig.width=7}
-ggplot(L_RES, aes(x = Filtros, y = liquidez_x_compañía)) +
-  geom_bar(stat = "identity", fill= "blue") +
-  labs(x = "Valor", y = "Liquidez") +
-  theme_minimal() +
-  theme_bw(base_size = 10) +
-  facet_wrap(~"Liquidez por tipo de compañia frente a la cantidad de trabajadores") + 
-  theme(legend.position = "none")
-```
-
-#### EMPRESAS CON MAYOR APALANCAMIENTO
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r APALANCAMIENTO}
-TOP_APAL<-empresas %>% select(Empresas,Apalancamiento)
-
-TOP_ordenados<-TOP_APAL %>% arrange(desc(Apalancamiento)) 
-TOP_10<-head(TOP_ordenados,10)
-
-```
-
-```{r grafico, echo=TRUE, out.width='75%', fig.align='center', fig.width=7}
-ggplot(TOP_10, aes(x = Apalancamiento, y = reorder(Empresas,Apalancamiento), fill = Empresas)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Apalancamiento", y = "Empresas") +
-  theme_bw(base_size = 10) +   
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none") +
-  facet_wrap(~"Las 10 empresas con mejor apalancamiento")
-```
-
-#### TABLA NUMERO TOTAL DE EMPRESAS POR ACTIVIDAD Y CANTON
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Para conocer el número total de empresas en base a su actividad económica y por cantón, se creó una tabla resumida. Para ello, se importó la base de datos denominada ciuu.xlsx y se la almacenó en el objeto data_2. Se empleó funciones de tidyverse como select, count, arrange, summarise, group by () y además se realizó un left join empleando la base de datos creada anteriormente (empresas) para obtener la tabla resumida.
 
 ```{r TABLA_RESUMEN}
-#Tabla resumida que contiene el número total de empresas por actividad económica y
-#por actividad económica por cada cantón.
+
 data_2<- as_tibble(read.xlsx("Datos/ciiu.xlsx"))
 data_2<-data_2 %>%select(CODIGO,DESCRIPCION)
 
@@ -238,7 +142,7 @@ Tabla_Resumen <- TABLA %>% select(Actividad_económica,DESCRIPCION,Cantón,
        view("tabla_resumen")
 ```
 
-### Comparativo gráfico de los indicadores financieros de liquidez yolvencia por Status y provincia.
+A continuación, se comparó en un gráfico de barras los indicadores financieros de liquidez y solvencia por Status y provincia empleando la data creada denominada "empresas" y la función de ggplot(). Con ésta visualizacion podemos obtener una idea de si las empresas están en la capacidad de cumplir con sus obligaciones financieras a corto y largo plazo. **En la gráfica se puede observar que**
 
 ```{r grafico LIQUIDEZ CORRIENTE, echo=TRUE, fig.width=8, fig.align='center', warning=FALSE, message=FALSE}
 ggplot(empresas, aes(x = " ", y = Liquidez_corriente ,fill=Status)) +
@@ -295,11 +199,7 @@ ggplot(empresas, aes(x = " ", y = Apalancamiento,fill=Status)) +
   guides(fill = guide_legend(ncol = 3))
 ```
 
-#### Comparativo de los indicadores financieros de liquidez y solvencia por tipo de empresa
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Finalmente, se visualizó los mismos indicadores del gráfico anterior pero en base al tipo de empresa y empleando un gráfico de lineas y puntos. Se puede observar un patrón conservado donde se refleja que las empresas que tienen menos endeudamiento del patrimonio presentan mayor liquidez y viceversa.
 
 ```{r grafico, echo=TRUE, fig.width=7.5, fig.align='center', warning=FALSE, message=FALSE}
 ggplot(empresas, aes(x = Tipo_de_empresa)) +
@@ -335,3 +235,96 @@ ggplot(empresas, aes(x = Tipo_de_empresa)) +
   facet_wrap(~"Comparativo de los Indicadores Financieros de Liquidez y Solvencia por Tipo de empresa")+
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "right")
 ```
+
+## ANALISIS
+
+#### Endeudamiento del activo
+
+¿ En qué empresas fue mayor el endeudamiento del activo, sean estas micro- pequeñas vs grandes empresas?\
+La gráfica muestra que existe un mayor endeudamiento del activo en la micro y pequeña empresa en comparación con las grandes empresas. Éste resultado puede explicarse porque las micro y pequeñas empresas tienen recursos financieros limitados por lo que se dificulta su capacidad para financiar e invertir en infraestructura, maquinarias, materia prima, producción, marqueting; por lo cual recurren al endeudamiento externo para obtener los fondos necesarios y seguir avanzando y creciendo.
+
+```{r ENDEUDAMIENTO}
+#1. ¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?
+PM<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% filter(tamanio=="PEQUEÑA" | tamanio=="MICRO") 
+E_activo_PM<-sum(PM$Endeudamiento_del_activo, na.rm = TRUE)
+
+G<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% filter(tamanio=="GRANDE") 
+E_activo_G<-sum(G$Endeudamiento_del_activo, na.rm = TRUE)
+
+RESULTADOS<-data.frame(
+  Tamaño_empresa = c("Micro + Pequeñas", "Grandes"),
+  Endeudamiento=c(E_activo_PM,E_activo_G)
+)
+```
+
+Gráfica donde se puede visualizar el endeudamiento del activo entre micro-pequeña vs grandes empresas
+
+```{r ENDEUDAMIENTO DEL ACTIVO, echo=FALSE, fig.align='center', fig.width=6}
+ggplot(RESULTADOS, aes(x = Tamaño_empresa, y = Endeudamiento, fill = Tamaño_empresa)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Tamaño empresa", y = "Endeudamiento del activo") +
+  theme_minimal() + 
+  theme_bw(base_size = 10) +
+  facet_wrap(~"Endeudamiento del Activo: Micro + Peque vs Grande") + 
+  theme(legend.position = "none")
+```
+
+#### Liquidéz por tipo de compañia y por número de trabajadores
+
+¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?\
+La gráfica obtenida muestra
+
+```{r LIQUIDEZ}
+
+LIQ_B<-empresas %>% select(Tipo_de_empresa,Liquidez_corriente,trab_direc) %>% 
+  group_by(Tipo_de_empresa) %>% filter(trab_direc>=60) 
+ResB<-sum(LIQ_B$Liquidez_corriente, na.rm = TRUE)
+
+LIQ_C<-empresas %>% select(Liquidez_corriente,trab_admin,Tipo_de_empresa) %>%
+  group_by(Tipo_de_empresa)%>% filter(trab_admin >=100 & trab_admin <=800)
+ResC<-sum(LIQ_C_limpio$Liquidez_corriente, na.rm = TRUE)
+
+
+L_RES<-data.frame(
+  Filtros=c("Mayor e igual a 60 trabajadores direct."," 100 a 800 trabajadores administ."),
+  liquidez_x_compañía= c(ResB, ResC)
+)
+
+```
+
+Gráfica de barras donde se puede visualizar la liquidez por tipo de companía y el número de trabajadores
+
+```{r grafico, echo=TRUE, fig.align='center', fig.width=7}
+ggplot(L_RES, aes(x = Filtros, y = liquidez_x_compañía)) +
+  geom_bar(stat = "identity", fill= "blue") +
+  labs(x = "Valor", y = "Liquidez") +
+  theme_minimal() +
+  theme_bw(base_size = 10) +
+  facet_wrap(~"Liquidez por tipo de compañia frente a la cantidad de trabajadores") + 
+  theme(legend.position = "none")
+```
+
+#### Empresas con mayor apalancamiento
+
+La gráfica muestra las 10 empresas con mayor apalancamiento, donde resalta la empresa siderurgica Adelca del Litoral S.A., seguida por Hiroaky S.A. y Megatropic S.A. Algunas razones por las cuales las empresas pueden tener un mejor apalancamiento es por sus altos márgenes de beneficios y bajos costos operativos; esto significa que pueden utiilizar mejor la deuda como herramienta de financiamiento sin que se vuelva insostenible en el tiempo. Además, al generar un flujo de efectivo constante y predecible pueden hacer pagos regulares sin que eso efecte sus operaciones comerciales. Es imperativo que las empreas sean capaces de utilizar la deuda en inversiones que les genere flujos de efectivo suficiente para cubrir los pagos de interes y otros varios.
+
+```{r APALANCAMIENTO}
+TOP_APAL<-empresas %>% select(Empresas,Apalancamiento)
+
+TOP_ordenados<-TOP_APAL %>% arrange(desc(Apalancamiento)) 
+TOP_10<-head(TOP_ordenados,10)
+
+```
+
+Gráfica de barras donde se puede visualizar el TOP 10 de las empresas con mayor apalancamiento
+
+```{r grafico, echo=TRUE, out.width='75%', fig.align='center', fig.width=7}
+ggplot(TOP_10, aes(x = Apalancamiento, y = reorder(Empresas,Apalancamiento), fill = Empresas)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Apalancamiento", y = "Empresas") +
+  theme_bw(base_size = 10) +   
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none") +
+  facet_wrap(~"Las 10 empresas con mejor apalancamiento")
+```
+
+## CONCLUSIONES
