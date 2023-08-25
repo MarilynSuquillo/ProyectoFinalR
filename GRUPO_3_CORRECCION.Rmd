@@ -1,13 +1,13 @@
 ---
 title: "ProyectoR"
 author: "Grupo3"
-date: "2023-08-23"
+date: "2023-08-25"
 output: pdf_document
 ---
 
 ## ANALIZANDO LOS INDICADORES FINANCIEROS DE EMPRESAS ECUATORIANAS DEL AÑO 2014
 
-Chasi Milka,Castillo Anshela,Suquillo Marilyn\
+Chasi Milka, Suquillo Marilyn, Castillo Anshela.\
 25- Agosto - 2023
 
 ### INTRODUCCIÓN
@@ -141,7 +141,7 @@ Tabla_Resumen <- TABLA %>% select(Actividad_económica,DESCRIPCION,Cantón,
        view("tabla_resumen")
 ```
 
-A continuación, se comparó en un gráfico de barras los indicadores financieros de liquidez y solvencia por Status y provincia empleando la data creada denominada "empresas" y la función de ggplot(). Con ésta visualizacion podemos obtener una idea de si las empresas están en la capacidad de cumplir con sus obligaciones financieras a corto y largo plazo. **En la gráfica se puede observar que**
+A continuación, se comparó en un gráfico de barras los indicadores financieros de liquidez y solvencia por Status y provincia empleando la data creada denominada "empresas" y la función de ggplot(). Con ésta visualizacion podemos obtener una idea de si las empresas están en la capacidad de cumplir con sus obligaciones financieras a corto y largo plazo.
 
 ```{r grafico LIQUIDEZ CORRIENTE, echo=TRUE, fig.width=9,fig.height=7, fig.align='left', warning=FALSE, message=FALSE}
 ggplot(empresas, aes(x = " ", y = Liquidez_corriente ,fill=Status)) +
@@ -290,7 +290,7 @@ ggplot(RESULTADOS, aes(x = Tamaño_empresa, y = Endeudamiento,
 #### Liquidéz por tipo de compañia y por número de trabajadores
 
 \
-La gráfica obtenida muestra que las empresas que de acuerdo con los resultados de nuestra investigación, se han identificado diferencias en los niveles de liquidez corriente entre las empresas que cumplen con estos criterios y las que no los cumplen. Es relevante recalcar que la liquidez corriente es una métrica utilizada para evaluar la capacidad de una empresa para cumplir con sus obligaciones a corto plazo mediante el uso de sus activos corrientes, como el efectivo, las cuentas por cobrar y el inventario. Observamos que las empresas que cumplen con los criterios establecidos presentan una cierta tendencia en sus niveles de liquidez, en comparación con aquellas que no se ajustan a estos criterios. La relación entre la liquidez y el tipo de empresa que cumple con las condiciones mencionadas es intrigante. Un hallazgo interesante es que las métricas mostradas son de acuerdo al cargo de los trabajadores dentro de la parte administrativa o normal .Esta diferencia en los niveles de liquidez podría atribuirse a diversos factores.
+La gráfica obtenida nos permite identificar diferencias en los niveles de liquidez corriente entre las empresas que cumplen con estos criterios y las que no los cumplen. Es importante recalcar que la liquidez corriente es una métrica utilizada para evaluar la capacidad de una empresa para cumplir con sus obligaciones a corto plazo mediante el uso de sus activos corrientes, como el efectivo, las cuentas por cobrar y el inventario. Observamos que las empresas que albergan de 100 a 800 trabajadores tienen mayor liquidez en comparación con aquellas que albergan menos mas de 60 hasta 99 trabaajadores. La relación entre la liquidez y el tipo de empresa que cumple con las condiciones mencionadas es intrigante.
 
 ```{r LIQUIDEZ}
 
