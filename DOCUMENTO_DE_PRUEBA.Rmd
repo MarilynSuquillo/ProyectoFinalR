@@ -53,7 +53,7 @@ data_balances<- read.xlsx("Datos/balances_2014.xlsx")
 data_balances
 ```
 
-```{r empresas}
+```{r empresa}
 empresas<- as_tibble(data_balances)
 dim(empresas)
 ```
@@ -62,7 +62,7 @@ dim(empresas)
 
 Se empleó la función mutate para agregar nuevas variables, que corresponden a los indicadores financieros, a la base de datos. Los códigos correctos de los numeradores y denominadores fueron referenciados de acuerdo a la base ciuu.xlsx; la misma que más adenlante será importada y cargada a R para su uso.
 
-```{r empresas}
+```{r empresas_indicadores}
 empresas<-mutate(empresas,Liquidez_corriente=v345/v539,
                  Endeudamiento_del_activo=v599/v499,
                  Endeudamiento_patrimonial=v599/v698,
@@ -102,7 +102,7 @@ empresas <- empresas[ is.finite(empresas$Apalancamiento), ]
 
 Se selecionó, empleando la función select(), las variables necesarias y, a su vez, se las renombró de acuerdo a lo solicitado. Ésta base asignada al objeto "empresas", la mismas que se compone de variables categóricas y numéricas, será la empleada para responder a los objetivos planteados
 
-```{r empresas}
+```{r empresas_base}
 empresas<- select(empresas, Empresas = nombre_cia,
                   Status = situacion,
                   Tipo_de_empresa= tipo,
@@ -144,7 +144,7 @@ Tabla_Resumen <- TABLA %>% select(Actividad_económica,DESCRIPCION,Cantón,
 
 A continuación, se comparó en un gráfico de barras los indicadores financieros de liquidez y solvencia por Status y provincia empleando la data creada denominada "empresas" y la función de ggplot(). Con ésta visualizacion podemos obtener una idea de si las empresas están en la capacidad de cumplir con sus obligaciones financieras a corto y largo plazo. **En la gráfica se puede observar que**
 
-```{r grafico LIQUIDEZ CORRIENTE, echo=TRUE, fig.width=8, fig.align='center', warning=FALSE, message=FALSE}
+```{r grafico LIQUIDEZ CORRIENTE, echo=TRUE, fig.width=9, fig.align='left', warning=FALSE, message=FALSE}
 ggplot(empresas, aes(x = " ", y = Liquidez_corriente ,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") + 
   labs(title = "Liquidez_corriente por Status y Provincia",
@@ -155,7 +155,7 @@ ggplot(empresas, aes(x = " ", y = Liquidez_corriente ,fill=Status)) +
   guides(fill = guide_legend(ncol = 3))
 ```
 
-```{r grafico ENDEUDAMIENTO DEL ACTIVO, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE, fig.width=8}
+```{r grafico ENDEUDAMIENTO DEL ACTIVO, echo=TRUE, fig.align='left', message=FALSE, warning=FALSE, fig.width=9}
 ggplot(empresas, aes(x = " ", y = Endeudamiento_del_activo,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") +
   labs(title = "Endeudamiento del activo por Status y Provincia",
@@ -166,7 +166,7 @@ ggplot(empresas, aes(x = " ", y = Endeudamiento_del_activo,fill=Status)) +
   guides(fill = guide_legend(ncol = 3))
 ```
 
-```{r grafico ENDEUDAMIENTO PATRIMONIAL, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE, fig.width=8}
+```{r grafico ENDEUDAMIENTO PATRIMONIAL, echo=TRUE, fig.align='left', message=FALSE, warning=FALSE, fig.width=9}
 ggplot(empresas, aes(x = " ", y = Endeudamiento_patrimonial,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") +
   labs(title = "Endeudamiento patrimonial por Status y Provincia",
@@ -177,7 +177,7 @@ ggplot(empresas, aes(x = " ", y = Endeudamiento_patrimonial,fill=Status)) +
   guides(fill = guide_legend(ncol = 3))
 ```
 
-```{r grafico ENDEUDAMIENTO DEL ACTIVO FIJO, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE, fig.width=8}
+```{r grafico ENDEUDAMIENTO DEL ACTIVO FIJO, echo=TRUE, fig.align='left', message=FALSE, warning=FALSE, fig.width=9}
 ggplot(empresas, aes(x = " ", y = Endeudamiento_del_Activo_Fijo,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") +
   labs(title = "Endeudamiento_del_Activo_Fijo por Status y Provincia",
@@ -188,7 +188,7 @@ ggplot(empresas, aes(x = " ", y = Endeudamiento_del_Activo_Fijo,fill=Status)) +
   guides(fill = guide_legend(ncol = 3))
 ```
 
-```{r grafico APALANCAMIENTO, echo=TRUE, fig.align='center', message=FALSE, warning=FALSE, fig.width=8}
+```{r grafico APALANCAMIENTO, echo=TRUE, fig.align='left', message=FALSE, warning=FALSE, fig.width=9}
 ggplot(empresas, aes(x = " ", y = Apalancamiento,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") +
   labs(title = "Comparativo de Apalancamiento por Status y Provincia",
@@ -201,7 +201,7 @@ ggplot(empresas, aes(x = " ", y = Apalancamiento,fill=Status)) +
 
 Finalmente, se visualizó los mismos indicadores del gráfico anterior pero en base al tipo de empresa y empleando un gráfico de lineas y puntos. Se puede observar un patrón conservado donde se refleja que las empresas que tienen menos endeudamiento del patrimonio presentan mayor liquidez y viceversa.
 
-```{r grafico, echo=TRUE, fig.width=7.5, fig.align='center', warning=FALSE, message=FALSE}
+```{r grafico_LIQUIDEZ_SOLVENCIA, echo=TRUE, fig.width=7.5, fig.align='center', warning=FALSE, message=FALSE}
 ggplot(empresas, aes(x = Tipo_de_empresa)) +
   geom_line(aes(y = Liquidez_corriente, group = 1, color = "Liquidez Corriente"), 
             stat = "summary", fun = "mean", position = "dodge", size = 1) +
@@ -245,10 +245,12 @@ La gráfica muestra que existe un mayor endeudamiento del activo en la micro y p
 
 ```{r ENDEUDAMIENTO}
 #1. ¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?
-PM<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% filter(tamanio=="PEQUEÑA" | tamanio=="MICRO") 
+PM<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% 
+  filter(tamanio=="PEQUEÑA" | tamanio=="MICRO") 
 E_activo_PM<-sum(PM$Endeudamiento_del_activo, na.rm = TRUE)
 
-G<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% filter(tamanio=="GRANDE") 
+G<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% 
+  filter(tamanio=="GRANDE") 
 E_activo_G<-sum(G$Endeudamiento_del_activo, na.rm = TRUE)
 
 RESULTADOS<-data.frame(
@@ -294,7 +296,7 @@ L_RES<-data.frame(
 
 Gráfica de barras donde se puede visualizar la liquidez por tipo de companía y el número de trabajadores
 
-```{r grafico, echo=TRUE, fig.align='center', fig.width=7}
+```{r GRAFICO_LIQUIDEZ_TRABAJADORES, echo=TRUE, fig.align='center', fig.width=7}
 ggplot(L_RES, aes(x = Filtros, y = liquidez_x_compañía)) +
   geom_bar(stat = "identity", fill= "blue") +
   labs(x = "Valor", y = "Liquidez") +
@@ -318,7 +320,7 @@ TOP_10<-head(TOP_ordenados,10)
 
 Gráfica de barras donde se puede visualizar el TOP 10 de las empresas con mayor apalancamiento
 
-```{r grafico, echo=TRUE, out.width='75%', fig.align='center', fig.width=7}
+```{r GRAFICO_TOP_EMPRESAS, echo=TRUE, out.width='75%', fig.align='center', fig.width=7}
 ggplot(TOP_10, aes(x = Apalancamiento, y = reorder(Empresas,Apalancamiento), fill = Empresas)) +
   geom_bar(stat = "identity") +
   labs(x = "Apalancamiento", y = "Empresas") +
