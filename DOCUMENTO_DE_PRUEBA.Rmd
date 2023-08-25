@@ -33,8 +33,7 @@ Analizar los indicadores financieros de liquidez y solvencia empleando el lengua
 
 Para el análisis de datos en R, en primer lugar, se requiere cargar las siguientes librerias que albergan diversas funciones a emplearse en la presente investigación.
 
-```{r Paquetes, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,message=FALSE, warning = FALSE)
+```{r Paquetes,include=TRUE,results='hide', message=FALSE, warning=FALSE}
 library(tidyverse)
 library(magrittr)
 library(openxlsx)
@@ -48,12 +47,12 @@ library(ggplot2)
 
 Se importó la base de datos con la cual se trabajó. Se le asignó al objeto ' empresas ' y se convirtió a un tibble.
 
-```{r data_balances}
+```{r data_balances, results='hide'}
 data_balances<- read.xlsx("Datos/balances_2014.xlsx")
 data_balances
 ```
 
-```{r empresa}
+```{r empresa, results='hide'}
 empresas<- as_tibble(data_balances)
 dim(empresas)
 ```
@@ -62,7 +61,7 @@ dim(empresas)
 
 Se empleó la función mutate para agregar nuevas variables, que corresponden a los indicadores financieros, a la base de datos. Los códigos correctos de los numeradores y denominadores fueron referenciados de acuerdo a la base ciuu.xlsx; la misma que más adenlante será importada y cargada a R para su uso.
 
-```{r empresas_indicadores}
+```{r empresas_indicadores, results='hide'}
 empresas<-mutate(empresas,Liquidez_corriente=v345/v539,
                  Endeudamiento_del_activo=v599/v499,
                  Endeudamiento_patrimonial=v599/v698,
@@ -74,9 +73,9 @@ empresas<-mutate(empresas,Liquidez_corriente=v345/v539,
 
 Al calcular los indicadores financieros se obtenian valores inf ( debido a la división para cero) por tanto se realizó la limpieza de los datos empleando funciones de la familia is para determinar si existen valores faltantes y comprobar si los valores obtenidos, despues de filtrar y excluir los valores de cero , son finitos.
 
-```{r empresas}
+```{r empresas, results='hide'}
 sum(is.na(empresas))
-#se realiza la limpieza de los datos 
+ 
 
 empresas <- empresas[!is.na(empresas$Liquidez_corriente), ]  
 empresas <- empresas[!is.na(empresas$Endeudamiento_del_activo), ] 
@@ -144,7 +143,7 @@ Tabla_Resumen <- TABLA %>% select(Actividad_económica,DESCRIPCION,Cantón,
 
 A continuación, se comparó en un gráfico de barras los indicadores financieros de liquidez y solvencia por Status y provincia empleando la data creada denominada "empresas" y la función de ggplot(). Con ésta visualizacion podemos obtener una idea de si las empresas están en la capacidad de cumplir con sus obligaciones financieras a corto y largo plazo. **En la gráfica se puede observar que**
 
-```{r grafico LIQUIDEZ CORRIENTE, echo=TRUE, fig.width=9, fig.align='left', warning=FALSE, message=FALSE}
+```{r grafico LIQUIDEZ CORRIENTE, echo=TRUE, fig.width=9,fig.height=7, fig.align='left', warning=FALSE, message=FALSE}
 ggplot(empresas, aes(x = " ", y = Liquidez_corriente ,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") + 
   labs(title = "Liquidez_corriente por Status y Provincia",
@@ -155,7 +154,7 @@ ggplot(empresas, aes(x = " ", y = Liquidez_corriente ,fill=Status)) +
   guides(fill = guide_legend(ncol = 3))
 ```
 
-```{r grafico ENDEUDAMIENTO DEL ACTIVO, echo=TRUE, fig.align='left', message=FALSE, warning=FALSE, fig.width=9}
+```{r grafico ENDEUDAMIENTO DEL ACTIVO, echo=TRUE, fig.align='left', message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
 ggplot(empresas, aes(x = " ", y = Endeudamiento_del_activo,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") +
   labs(title = "Endeudamiento del activo por Status y Provincia",
@@ -166,7 +165,7 @@ ggplot(empresas, aes(x = " ", y = Endeudamiento_del_activo,fill=Status)) +
   guides(fill = guide_legend(ncol = 3))
 ```
 
-```{r grafico ENDEUDAMIENTO PATRIMONIAL, echo=TRUE, fig.align='left', message=FALSE, warning=FALSE, fig.width=9}
+```{r grafico ENDEUDAMIENTO PATRIMONIAL, echo=TRUE, fig.align='left', message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
 ggplot(empresas, aes(x = " ", y = Endeudamiento_patrimonial,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") +
   labs(title = "Endeudamiento patrimonial por Status y Provincia",
@@ -177,7 +176,7 @@ ggplot(empresas, aes(x = " ", y = Endeudamiento_patrimonial,fill=Status)) +
   guides(fill = guide_legend(ncol = 3))
 ```
 
-```{r grafico ENDEUDAMIENTO DEL ACTIVO FIJO, echo=TRUE, fig.align='left', message=FALSE, warning=FALSE, fig.width=9}
+```{r grafico ENDEUDAMIENTO DEL ACTIVO FIJO, echo=TRUE, fig.align='left', message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
 ggplot(empresas, aes(x = " ", y = Endeudamiento_del_Activo_Fijo,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") +
   labs(title = "Endeudamiento_del_Activo_Fijo por Status y Provincia",
@@ -188,7 +187,7 @@ ggplot(empresas, aes(x = " ", y = Endeudamiento_del_Activo_Fijo,fill=Status)) +
   guides(fill = guide_legend(ncol = 3))
 ```
 
-```{r grafico APALANCAMIENTO, echo=TRUE, fig.align='left', message=FALSE, warning=FALSE, fig.width=9}
+```{r grafico APALANCAMIENTO, echo=TRUE, fig.align='left', message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
 ggplot(empresas, aes(x = " ", y = Apalancamiento,fill=Status)) +
   geom_bar(stat = "summary", position = "stack") +
   labs(title = "Comparativo de Apalancamiento por Status y Provincia",
@@ -240,11 +239,11 @@ ggplot(empresas, aes(x = Tipo_de_empresa)) +
 
 #### Endeudamiento del activo
 
-¿ En qué empresas fue mayor el endeudamiento del activo, sean estas micro- pequeñas vs grandes empresas?\
+\
 La gráfica muestra que existe un mayor endeudamiento del activo en la micro y pequeña empresa en comparación con las grandes empresas. Éste resultado puede explicarse porque las micro y pequeñas empresas tienen recursos financieros limitados por lo que se dificulta su capacidad para financiar e invertir en infraestructura, maquinarias, materia prima, producción, marqueting; por lo cual recurren al endeudamiento externo para obtener los fondos necesarios y seguir avanzando y creciendo.
 
 ```{r ENDEUDAMIENTO}
-#1. ¿El endeudamiento del activo fue mayor en empresas micro + pequeñas vs. grandes?
+
 PM<-empresas %>% select(tamanio,Endeudamiento_del_activo) %>% 
   filter(tamanio=="PEQUEÑA" | tamanio=="MICRO") 
 E_activo_PM<-sum(PM$Endeudamiento_del_activo, na.rm = TRUE)
@@ -273,7 +272,7 @@ ggplot(RESULTADOS, aes(x = Tamaño_empresa, y = Endeudamiento, fill = Tamaño_em
 
 #### Liquidéz por tipo de compañia y por número de trabajadores
 
-¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?\
+\
 La gráfica obtenida muestra que las empresas que
 
 ```{r LIQUIDEZ}
@@ -296,19 +295,20 @@ L_RES<-data.frame(
 
 Gráfica de barras donde se puede visualizar la liquidez por tipo de companía y el número de trabajadores
 
-```{r GRAFICO_LIQUIDEZ_TRABAJADORES, echo=TRUE, fig.align='center', fig.width=7}
+```{r GRAFICO_LIQUIDEZ_TRABAJADORES, echo=TRUE, fig.align='center',fig.width= 7 }
 ggplot(L_RES, aes(x = Filtros, y = liquidez_x_compañía)) +
-  geom_bar(stat = "identity", fill= "blue") +
-  labs(x = "Valor", y = "Liquidez") +
-  theme_minimal() +
-  theme_bw(base_size = 10) +
-  facet_wrap(~"Liquidez por tipo de compañia frente a la cantidad de trabajadores") + 
-  theme(legend.position = "none")
+geom_bar(stat = "identity", fill= "blue") +
+labs(x = "Valor", y = "Liquidez") +
+theme_minimal() +
+theme_bw(base_size = 10) +
+facet_wrap(~"Liquidez por tipo de compañia frente a la cantidad de trabajadores") +
+theme(legend.position = "none")
+
 ```
 
 #### Empresas con mayor apalancamiento
 
-¿ Cuáles son las 10 empresas que presentan mayor apalancamiento? La gráfica muestra las 10 empresas con mayor apalancamiento, donde resalta la empresa siderurgica Adelca del Litoral S.A., seguida por Hiroaky S.A. y Megatropic S.A. Algunas razones por las cuales las empresas pueden tener un mejor apalancamiento es por sus altos márgenes de beneficios y bajos costos operativos; esto significa que pueden utiilizar mejor la deuda como herramienta de financiamiento sin que se vuelva insostenible en el tiempo. Además, al generar un flujo de efectivo constante y predecible pueden hacer pagos regulares sin que eso efecte sus operaciones comerciales. Es imperativo que las empreas sean capaces de utilizar la deuda en inversiones que les genere flujos de efectivo suficiente para cubrir los pagos de interes y otros varios.
+La gráfica muestra las 10 empresas con mayor apalancamiento, donde resalta la empresa siderurgica Adelca del Litoral S.A., seguida por Hiroaky S.A. y Megatropic S.A. Algunas razones por las cuales las empresas pueden tener un mejor apalancamiento es por sus altos márgenes de beneficios y bajos costos operativos; esto significa que pueden utiilizar mejor la deuda como herramienta de financiamiento sin que se vuelva insostenible en el tiempo. Además, al generar un flujo de efectivo constante y predecible pueden hacer pagos regulares sin que eso efecte sus operaciones comerciales. Es imperativo que las empreas sean capaces de utilizar la deuda en inversiones que les genere flujos de efectivo suficiente para cubrir los pagos de interes y otros varios.
 
 ```{r APALANCAMIENTO}
 TOP_APAL<-empresas %>% select(Empresas,Apalancamiento)
@@ -320,7 +320,7 @@ TOP_10<-head(TOP_ordenados,10)
 
 Gráfica de barras donde se puede visualizar el TOP 10 de las empresas con mayor apalancamiento
 
-```{r GRAFICO_TOP_EMPRESAS, echo=TRUE, out.width='75%', fig.align='center', fig.width=7}
+```{r GRAFICO_TOP_EMPRESAS, echo=TRUE, out.width='75%', fig.align='center', fig.width=6}
 ggplot(TOP_10, aes(x = Apalancamiento, y = reorder(Empresas,Apalancamiento), fill = Empresas)) +
   geom_bar(stat = "identity") +
   labs(x = "Apalancamiento", y = "Empresas") +
