@@ -251,7 +251,7 @@ ggplot(empresas, aes(x = Tipo_de_empresa)) +
         legend.position = "right")
 ```
 
-## ANALISIS
+## ANÁLISIS
 
 #### Endeudamiento del activo
 
