@@ -12,7 +12,7 @@ Chasi Milka, Suquillo Marilyn, Castillo Anshela.\
 
 ### INTRODUCCIÓN
 
-Una visión cuantitativa de la salud financiera de las empresas se obtiene al analizar los ratios o indicadores financieros. Los indicadores financierons son herramientas clave en el análisis económico de las empreas porque permite evaluar su eficiencia operativa, liquidez, rentabilidad y solidez. Estas herramientas, básicamente, son relaciones matemáticas entre diferentes elementos de los estados financieros (Párraga et al., 2021).\
+Una visión cuantitativa de la salud financiera de las empresas se obtiene analizando los ratios o indicadores financieros. Los indicadores financierons son herramientas clave en el análisis económico de las empreas porque permite evaluar su eficiencia operativa, liquidez, rentabilidad y solidez. Estas herramientas, básicamente, son relaciones matemáticas entre diferentes elementos de los estados financieros (Párraga et al., 2021).\
 En la actualidad, los análisis de finanzas, empleando indicadores financieros, pueden ser calculados a través de la Ciencia de datos que se sirve de softwars o lenguajes de programación para su análisis. Contar con información detallada y analizada de los indicadores permite a las empresas tomar decisiones acertadas y ejecutar planes de acción que permitan identificar sus puntos fuertes y débiles comparada con otros negocios.
 
 ### OBJETIVOS
