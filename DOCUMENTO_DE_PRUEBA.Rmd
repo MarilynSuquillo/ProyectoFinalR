@@ -12,7 +12,7 @@ Chasi Milka, Suquillo Marilyn\
 
 ### INTRODUCCIÓN
 
-Una visión cuantitativa de la salud financiera de las empresas se obtiene al analizar los ratios o indicadores financieros. Los indicadores financierons son herramientas clave en el análisis económico de las empreas porque permite evaluar su eficiencia operativa, liquidez, rentabilidad y solidez. Estas herramientas, básicamente, son relaciones matemáticas entre diferentes elementos de los estados financieros (Párraga et al., 2021)..\
+Una visión cuantitativa de la salud financiera de las empresas se obtiene al analizar los ratios o indicadores financieros. Los indicadores financierons son herramientas clave en el análisis económico de las empreas porque permite evaluar su eficiencia operativa, liquidez, rentabilidad y solidez. Estas herramientas, básicamente, son relaciones matemáticas entre diferentes elementos de los estados financieros (Párraga et al., 2021).\
 En la actualidad, los análisis de finanzas, empleando indicadores financieros, pueden ser calculados a través de la Ciencia de datos que se sirve de softwars o lenguajes de programación para su análisis. Contar con información detallada y analizada de los indicadores permite a las empresas tomar decisiones acertadas y ejecutar planes de acción que permitan identificar sus puntos fuertes y débiles comparada con otros negocios.
 
 ### OBJETIVOS
@@ -272,7 +272,7 @@ ggplot(RESULTADOS, aes(x = Tamaño_empresa, y = Endeudamiento, fill = Tamaño_em
 #### Liquidéz por tipo de compañia y por número de trabajadores
 
 ¿La liquidez por tipo de compañía es diferente entre aquellas empresas que tienen más de 60 trabajadores directos y que cuenta con 100 a 800 trabajadores administrativos?\
-La gráfica obtenida muestra
+La gráfica obtenida muestra que las empresas que
 
 ```{r LIQUIDEZ}
 
@@ -306,7 +306,7 @@ ggplot(L_RES, aes(x = Filtros, y = liquidez_x_compañía)) +
 
 #### Empresas con mayor apalancamiento
 
-La gráfica muestra las 10 empresas con mayor apalancamiento, donde resalta la empresa siderurgica Adelca del Litoral S.A., seguida por Hiroaky S.A. y Megatropic S.A. Algunas razones por las cuales las empresas pueden tener un mejor apalancamiento es por sus altos márgenes de beneficios y bajos costos operativos; esto significa que pueden utiilizar mejor la deuda como herramienta de financiamiento sin que se vuelva insostenible en el tiempo. Además, al generar un flujo de efectivo constante y predecible pueden hacer pagos regulares sin que eso efecte sus operaciones comerciales. Es imperativo que las empreas sean capaces de utilizar la deuda en inversiones que les genere flujos de efectivo suficiente para cubrir los pagos de interes y otros varios.
+¿ Cuáles son las 10 empresas que presentan mayor apalancamiento? La gráfica muestra las 10 empresas con mayor apalancamiento, donde resalta la empresa siderurgica Adelca del Litoral S.A., seguida por Hiroaky S.A. y Megatropic S.A. Algunas razones por las cuales las empresas pueden tener un mejor apalancamiento es por sus altos márgenes de beneficios y bajos costos operativos; esto significa que pueden utiilizar mejor la deuda como herramienta de financiamiento sin que se vuelva insostenible en el tiempo. Además, al generar un flujo de efectivo constante y predecible pueden hacer pagos regulares sin que eso efecte sus operaciones comerciales. Es imperativo que las empreas sean capaces de utilizar la deuda en inversiones que les genere flujos de efectivo suficiente para cubrir los pagos de interes y otros varios.
 
 ```{r APALANCAMIENTO}
 TOP_APAL<-empresas %>% select(Empresas,Apalancamiento)
@@ -328,3 +328,15 @@ ggplot(TOP_10, aes(x = Apalancamiento, y = reorder(Empresas,Apalancamiento), fil
 ```
 
 ## CONCLUSIONES
+
+Los resultados obtenidos nos permiten concluir que:
+
+-   Las micro y pequeñas empresas presenta un mayor nivel de endeudamiento del activo en comparación con las grandes empresas. En proporción relativa están representadas por el 92.61% y el 7.39 % respectivamente.
+
+-   Las empresas que albergan entre 100 a 800 trabajadores tienen maayor liquidez que las empresas con 60 empleados.
+
+-   Las 3 empresas que presentar mayor apalancamiento son ADELCA DEL LITORAL S.A, HIROAKY S.A. y MEGATROPIC S.A. Se destaca la empresa ADELCA DEL LITORAL con \$84393.408 de apalancamiento.
+
+## BIBLIOGRAFÍA
+
+Párraga Franco, S. M., Pinargote Vázquez, N. F., García Álava, C. M., & Zamora Sornoza, J. C. (2021). Indicadores de gestión financiera en pequeñas y medianas empresas en Iberoamérica: una revisión sistemática. Dilemas contemporáneos: educación, política y valores, 8(SPE2).
